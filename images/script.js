@@ -11,4 +11,5 @@ document.querySelectorAll("section, .service, .gallery img, blockquote")
   .forEach(el => {
     el.classList.add("hidden");
     observer.observe(el);
+    
   });
