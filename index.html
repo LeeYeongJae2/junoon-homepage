@@ -6,6 +6,8 @@
   <title>이선생줄눈 - 전문 줄눈 시공</title>
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
+  <!-- fullPage.js -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fullPage.js/3.1.2/fullpage.min.css">
 </head>
 <body>
   <!-- 헤더 -->
@@ -15,7 +17,7 @@
       <ul class="nav-links">
         <li><a href="#services">서비스</a></li>
         <li><a href="#comparison">비교</a></li>
-        <li><a href="#why">이선생줄눈</a></li>
+        <li><a href="#why-us">이선생줄눈</a></li>
         <li><a href="#gallery">시공 사례</a></li>
         <li><a href="#reviews">후기</a></li>
         <li><a href="#contact">상담</a></li>
@@ -23,167 +25,160 @@
     </div>
   </header>
 
-  <!-- 히어로 -->
-<section class="hero">
-  
-</section>
+  <!-- fullPage 컨테이너 -->
+  <div id="fullpage">
+    <!-- Hero -->
+    <div class="section hero" id="hero">
+      <img src="/images/MainImg.png" alt="메인 이미지">
+    </div>
 
-
-
-  <!-- 줄눈 시공 서비스 -->
-  <section id="services" class="alt-bg">
-    <h2>줄눈 시공 서비스</h2>
-    <p class="subtitle">전문 기술과 안전한 자재로 집안의 위생과 미관을 동시에 책임집니다.</p>
-    <div class="service-grid">
-      <div class="service-card">
-        <div class="icon">🧹</div>
-        <h3>편의성</h3>
-        <p>세제 없이도 물로만 청소 가능. 곰팡이 스트레스 완전 해소!</p>
-      </div>
-      <div class="service-card">
-        <div class="icon">💪</div>
-        <h3>내구성</h3>
-        <p>백시멘트 대비 10배 강력한 폴리우레아. 변색·균열 없는 10년 보증.</p>
-      </div>
-      <div class="service-card">
-        <div class="icon">🛡️</div>
-        <h3>안전성</h3>
-        <p>항균 성분 첨가로 곰팡이 억제. 아이와 반려동물도 안심!</p>
-      </div>
-      <div class="service-card">
-        <div class="icon">🔧</div>
-        <h3>시공 과정</h3>
-        <p>1. 기존 줄눈 제거 → 2. 프라이머 도포 → 3. 충진 → 4. 마감</p>
+    <!-- 서비스 -->
+    <div class="section alt-bg" id="services">
+      <div class="inner anim">
+        <h2>줄눈 시공 서비스</h2>
+        <p class="subtitle">전문 기술과 안전한 자재로 집안의 위생과 미관을 동시에 책임집니다.</p>
+        <div class="service-grid">
+          <div class="service-card anim" data-delay="100">
+            <div class="icon">🧹</div>
+            <h3>편의성</h3>
+            <p>세제 없이도 물로만 청소 가능. 곰팡이 스트레스 완전 해소!</p>
+          </div>
+          <div class="service-card anim" data-delay="200">
+            <div class="icon">💪</div>
+            <h3>내구성</h3>
+            <p>백시멘트 대비 10배 강력한 폴리우레아. 변색·균열 없는 2년 보증.</p>
+          </div>
+          <div class="service-card anim" data-delay="300">
+            <div class="icon">🛡️</div>
+            <h3>안전성</h3>
+            <p>항균 성분 첨가로 곰팡이 억제. 아이와 반려동물도 안심!</p>
+          </div>
+          <div class="service-card anim" data-delay="400">
+            <div class="icon">🔧</div>
+            <h3>시공 과정</h3>
+            <p>1. 기존 줄눈 제거 → 2. 프라이머 도포 → 3. 충진 → 4. 마감</p>
+          </div>
+        </div>
       </div>
     </div>
-  </section>
 
-  <!-- 비교 -->
-  <section id="comparison">
-    <h2>시공 비교</h2>
-    <table class="comparison-table">
-      <thead>
-        <tr>
-          <th>항목</th>
-          <th>백시멘트 줄눈</th>
-          <th>폴리우레아 줄눈</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td>내구성</td>
-          <td>❌ 쉽게 부서지고 변색</td>
-          <td>✅ 강력한 내구성, 반영구</td>
-        </tr>
-        <tr>
-          <td>위생</td>
-          <td>❌ 곰팡이와 세균 서식</td>
-          <td>✅ 항균 기능으로 곰팡이 억제</td>
-        </tr>
-        <tr>
-          <td>관리</td>
-          <td>❌ 청소가 어렵고 유지 힘듦</td>
-          <td>✅ 물로만 간편 청소 가능</td>
-        </tr>
-      </tbody>
-    </table>
-  </section>
-
-
-<!-- Why Us Section -->
-<section id="why-us" class="alt-bg">
-  <div class="container split-layout">
-    
-    <!-- 이미지 영역 -->
-    <div class="why-image">
-      <img src="/images/ Why Us Section.jpeg" alt="시공 이미지">
+    <!-- 비교 -->
+    <div class="section" id="comparison">
+      <div class="inner anim">
+        <h2>시공 비교</h2>
+        <div class="comparison-gallery">
+          <div class="gallery-item">
+            <img src="/images/작업전1.jpeg" alt="시공 전">
+            <span class="badge before">시공 전</span>
+          </div>
+          <div class="gallery-item">
+            <img src="/images/작업후2.jpeg" alt="시공 후">
+            <span class="badge after">시공 후</span>
+          </div>
+        </div>
+        <table class="comparison-table anim" data-delay="200">
+          <thead>
+            <tr>
+              <th>항목</th>
+              <th>백시멘트 줄눈</th>
+              <th>폴리우레아 줄눈</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>내구성</td>
+              <td>❌ 쉽게 부서지고 변색</td>
+              <td>✅ 강력한 내구성, 반영구</td>
+            </tr>
+            <tr>
+              <td>위생</td>
+              <td>❌ 곰팡이와 세균 서식</td>
+              <td>✅ 항균 기능으로 곰팡이 억제</td>
+            </tr>
+            <tr>
+              <td>관리</td>
+              <td>❌ 청소가 어렵고 유지 힘듦</td>
+              <td>✅ 물로만 간편 청소 가능</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
     </div>
-    
-    <!-- 텍스트 영역 -->
-    <div class="why-text">
-      <h2>왜 이선생줄눈인가?</h2>
-      <p class="subtitle">믿을 수 있는 이유를 확인하세요</p>
-      
-      <ul class="why-list">
-        <li>🛡️ <strong>1년 보증</strong> - 시공 후에도 안심</li>
-        <li>🏗️ <strong>1,000건 시공</strong> - 검증된 경험</li>
-        <li>🌱 <strong>친환경 자재</strong> - 아이와 반려동물도 안심</li>
-        <li>👷 <strong>전문 팀</strong> - 경험 많은 시공팀</li>
-      </ul>
 
-      <!-- 숫자 통계 -->
-      <div class="why-stats-inline">
-        <div class="stat">
-          <h3 class="counter" data-target="10000">1000건</h3>
-          <p>누적 시공</p>
+    <!-- Why Us -->
+    <div class="section alt-bg" id="why-us">
+      <div class="why-header anim" data-delay="100">
+        <h2>왜 <span class="highlight">이선생줄눈</span>인가?</h2>
+        <p class="subtitle">믿을 수 있는 이유를 확인하세요</p>
+      </div>
+      <div class="inner split-layout">
+        <div class="why-image-grid anim" data-delay="200">
+          <img src="/images/HeaderImg.png" alt="시공 이미지 1" class="anim" data-delay="250">
+          <img src="/images/userimg.jpg" alt="시공 이미지 2" class="anim" data-delay="300">
+          <img src="/images/작업전1.jpeg" alt="시공 이미지 3" class="anim" data-delay="350">
+          <img src="/images/작업후2.jpeg" alt="시공 이미지 4" class="anim" data-delay="400">
         </div>
-        <div class="stat">
-          <h3 class="counter" data-target="97">97%</h3>
-          <p>고객 만족</p>
+        <div class="why-text anim" data-delay="450">
+          <ul class="why-list">
+            <li class="anim" data-delay="500"><span class="icon">🛡️</span><div><strong>2년 보증</strong><p>시공 후에도 안심할 수 있는 확실한 보증</p></div></li>
+            <li class="anim" data-delay="600"><span class="icon">🏗️</span><div><strong>1,000건 이상 시공</strong><p>다양한 현장에서 쌓인 검증된 경험</p></div></li>
+            <li class="anim" data-delay="700"><span class="icon">🌱</span><div><strong>친환경 자재</strong><p>아이와 반려동물도 안심할 수 있는 안전성</p></div></li>
+            <li class="anim" data-delay="800"><span class="icon">👷</span><div><strong>전문 팀</strong><p>경력 많은 전문가의 꼼꼼한 시공</p></div></li>
+            <li class="anim" data-delay="900"><span class="icon">🔥</span><div><strong>열정 가득</strong><p>작은 부분도 놓치지 않는 책임감과 열정으로</p></div></li>
+          </ul>
         </div>
-        <div class="stat">
-          <h3 class="counter" data-target="24">24시간</h3>
-          <p>친절 상담지원</p>
+      </div>
+    </div>
+
+    <!-- 시공 사례 -->
+    <div class="section" id="gallery">
+      <div class="inner anim">
+        <h2>시공 사례</h2>
+        <div class="gallery-grid anim" data-delay="200">
+          <div class="gallery-item"><img src="/images/HeaderImg.png"><span class="badge before">Before</span></div>
+          <div class="gallery-item"><img src="/images/userimg.jpg"><span class="badge after">After</span></div>
+          <div class="gallery-item"><img src="/images/작업전1.jpeg"><span class="badge before">Before</span></div>
+          <div class="gallery-item"><img src="/images/작업후2.jpeg"><span class="badge after">After</span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 후기 -->
+    <div class="section alt-bg" id="reviews">
+      <div class="inner reviews-grid anim">
+        <h2>후기</h2>
+        <div class="review-card anim" data-delay="100">
+          <div class="stars">⭐⭐⭐⭐⭐</div>
+          <p class="quote">"욕실이 새집처럼 변했어요! 청소도 훨씬 편리합니다."</p>
+          <p class="author">- 김민수 고객</p>
+        </div>
+        <div class="review-card anim" data-delay="200">
+          <div class="stars">⭐⭐⭐⭐⭐</div>
+          <p class="quote">"아이 키우는 집이라 위생이 걱정이었는데, 이젠 마음이 놓입니다."</p>
+          <p class="author">- 이지은 고객</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- 상담 -->
+    <div class="section" id="contact">
+      <div class="inner anim">
+        <h2>상담 문의</h2>
+        <p class="subtitle">빠르게 연결되는 상담 채널을 이용하세요.</p>
+        <div class="contact-buttons anim" data-delay="200">
+          <a href="https://pf.kakao.com/_yourkakaolink" target="_blank" class="btn kakao">💬 카톡 문의</a>
+          <a href="tel:010-1234-5678" class="btn phone">📞 전화 문의</a>
         </div>
       </div>
     </div>
   </div>
-</section>
 
-
-
-  <!-- 시공 사례 -->
-  <section id="gallery">
-    <h2>시공 사례</h2>
-    <div class="gallery">
-      <div class="img-wrap">
-        <img src="/images/작업전1.jpeg" alt="Before">
-        <span class="label before">Before</span>
-      </div>
-      <div class="img-wrap">
-        <img src="/images/작업후2.jpeg" alt="After">
-        <span class="label after">After</span>
-      </div>
-      <div class="img-wrap">
-        <img src="before2.jpg" alt="Before">
-        <span class="label before">Before</span>
-      </div>
-      <div class="img-wrap">
-        <img src="after2.jpg" alt="After">
-        <span class="label after">After</span>
-      </div>
-    </div>
-  </section>
-
-  <!-- 후기 -->
-  <section id="reviews" class="alt-bg">
-    <h2>고객 후기</h2>
-    <div class="reviews">
-      <blockquote>
-        ⭐⭐⭐⭐⭐<br>
-        "욕실이 새집처럼 변했어요! 청소도 훨씬 편리합니다." <br>- 김민수 고객
-      </blockquote>
-      <blockquote>
-        ⭐⭐⭐⭐⭐<br>
-        "아이 키우는 집이라 위생이 걱정이었는데, 이젠 마음이 놓입니다." <br>- 이지은 고객
-      </blockquote>
-    </div>
-  </section>
-
-  <!-- 상담 -->
-<section id="contact">
-  <h2>상담 문의</h2>
-  <p class="subtitle"> 빠르게 연결되는 상담 채널을 이용하세요.</p>
-  <div class="contact-buttons">
-    <a href="https://pf.kakao.com/_yourkakaolink" target="_blank" class="btn kakao">💬 카톡 문의</a>
-    <a href="tel:010-1234-5678" class="btn phone">📞 전화 문의</a>
-  </div>
-</section>
-
-
-  <!-- 푸터 -->
   <footer>
     <p>&copy; 2025 이선생줄눈. All rights reserved.</p>
   </footer>
+
+  <!-- JS -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/fullPage.js/3.1.2/fullpage.min.js"></script>
+  <script src="script.js"></script>
 </body>
 </html>
