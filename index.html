@@ -1,19 +1,29 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>이선생줄눈 - 전문 줄눈 시공</title>
-  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="style.css">
-  <!-- fullPage.js -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fullPage.js/3.1.2/fullpage.min.css">
+
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fullPage.js/3.1.2/fullpage.min.css" />
+  <link rel="stylesheet" href="style.css" />
+  <!-- Lightbox2 CSS -->
+<link href="https://cdnjs.cloudflare.com/ajax/libs/lightbox2/2.11.3/css/lightbox.min.css" rel="stylesheet">
+
+<!-- Lightbox2 JS -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/lightbox2/2.11.3/js/lightbox.min.js"></script>
+
 </head>
+
 <body>
   <!-- 헤더 -->
   <header class="navbar">
     <div class="nav-container">
-      <div class="logo"><img src="/images/HeaderImg.png" alt="이선생줄눈 로고"></div>
+      <div class="logo">
+        <img src="/images/HeaderImg.png" alt="이선생줄눈 로고" />
+      </div>
+      <button class="menu-toggle" aria-label="메뉴 열기">☰</button>
       <ul class="nav-links">
         <li><a href="#services">서비스</a></li>
         <li><a href="#comparison">비교</a></li>
@@ -29,7 +39,7 @@
   <div id="fullpage">
     <!-- Hero -->
     <div class="section hero" id="hero">
-      <img src="/images/MainImg.png" alt="메인 이미지">
+      <img src="/images/MainImg.png" alt="메인 이미지" />
     </div>
 
     <!-- 서비스 -->
@@ -37,6 +47,7 @@
       <div class="inner anim">
         <h2>줄눈 시공 서비스</h2>
         <p class="subtitle">전문 기술과 안전한 자재로 집안의 위생과 미관을 동시에 책임집니다.</p>
+
         <div class="service-grid">
           <div class="service-card anim" data-delay="100">
             <div class="icon">🧹</div>
@@ -62,20 +73,22 @@
       </div>
     </div>
 
-    <!-- 비교 -->
+    <!-- 시공 비교 -->
     <div class="section" id="comparison">
       <div class="inner anim">
         <h2>시공 비교</h2>
+
         <div class="comparison-gallery">
-          <div class="gallery-item">
-            <img src="/images/작업전1.jpeg" alt="시공 전">
+          <div class="comparison-item">
+            <img src="/images/작업전1.jpeg" alt="시공 전" />
             <span class="badge before">시공 전</span>
           </div>
-          <div class="gallery-item">
-            <img src="/images/작업후2.jpeg" alt="시공 후">
+          <div class="comparison-item">
+            <img src="/images/작업후2.jpeg" alt="시공 후" />
             <span class="badge after">시공 후</span>
           </div>
         </div>
+
         <table class="comparison-table anim" data-delay="200">
           <thead>
             <tr>
@@ -105,60 +118,120 @@
       </div>
     </div>
 
-    <!-- Why Us -->
-    <div class="section alt-bg" id="why-us">
-      <div class="why-header anim" data-delay="100">
-        <h2>왜 <span class="highlight">이선생줄눈</span>인가?</h2>
-        <p class="subtitle">믿을 수 있는 이유를 확인하세요</p>
-      </div>
-      <div class="inner split-layout">
-        <div class="why-image-grid anim" data-delay="200">
-          <img src="/images/HeaderImg.png" alt="시공 이미지 1" class="anim" data-delay="250">
-          <img src="/images/userimg.jpg" alt="시공 이미지 2" class="anim" data-delay="300">
-          <img src="/images/작업전1.jpeg" alt="시공 이미지 3" class="anim" data-delay="350">
-          <img src="/images/작업후2.jpeg" alt="시공 이미지 4" class="anim" data-delay="400">
-        </div>
-        <div class="why-text anim" data-delay="450">
-          <ul class="why-list">
-            <li class="anim" data-delay="500"><span class="icon">🛡️</span><div><strong>2년 보증</strong><p>시공 후에도 안심할 수 있는 확실한 보증</p></div></li>
-            <li class="anim" data-delay="600"><span class="icon">🏗️</span><div><strong>1,000건 이상 시공</strong><p>다양한 현장에서 쌓인 검증된 경험</p></div></li>
-            <li class="anim" data-delay="700"><span class="icon">🌱</span><div><strong>친환경 자재</strong><p>아이와 반려동물도 안심할 수 있는 안전성</p></div></li>
-            <li class="anim" data-delay="800"><span class="icon">👷</span><div><strong>전문 팀</strong><p>경력 많은 전문가의 꼼꼼한 시공</p></div></li>
-            <li class="anim" data-delay="900"><span class="icon">🔥</span><div><strong>열정 가득</strong><p>작은 부분도 놓치지 않는 책임감과 열정으로</p></div></li>
-          </ul>
-        </div>
-      </div>
+<!-- Why Us -->
+<div class="section alt-bg" id="why-us">
+  <div class="why-header anim" data-delay="100">
+    <h2>왜 <span class="highlight">이선생줄눈</span>인가?</h2>
+    <p class="subtitle">믿을 수 있는 이유를 확인하세요</p>
+  </div>
+
+  <div class="inner split-layout">
+    <!-- ✅ 이미지 영역 -->
+    <div class="why-image-single anim" data-delay="200">
+      <img src="/images/userimg2.jpg" alt="이선생줄눈 메인 이미지" class="anim" data-delay="250" />
     </div>
 
-    <!-- 시공 사례 -->
-    <div class="section" id="gallery">
-      <div class="inner anim">
-        <h2>시공 사례</h2>
-        <div class="gallery-grid anim" data-delay="200">
-          <div class="gallery-item"><img src="/images/HeaderImg.png"><span class="badge before">Before</span></div>
-          <div class="gallery-item"><img src="/images/userimg.jpg"><span class="badge after">After</span></div>
-          <div class="gallery-item"><img src="/images/작업전1.jpeg"><span class="badge before">Before</span></div>
-          <div class="gallery-item"><img src="/images/작업후2.jpeg"><span class="badge after">After</span></div>
-        </div>
-      </div>
+    <!-- ✅ 텍스트 리스트 -->
+    <div class="why-text anim" data-delay="450">
+      <ul class="why-list">
+        <li class="anim" data-delay="500"><span class="icon">🛡️</span><div><strong>2년 보증</strong><p>시공 후에도 안심할 수 있는 확실한 보증</p></div></li>
+        <li class="anim" data-delay="600"><span class="icon">🏗️</span><div><strong>1,000건 이상 시공</strong><p>다양한 현장에서 쌓인 검증된 경험</p></div></li>
+        <li class="anim" data-delay="700"><span class="icon">🌱</span><div><strong>친환경 자재</strong><p>아이와 반려동물도 안심할 수 있는 안전성</p></div></li>
+        <li class="anim" data-delay="800"><span class="icon">👷</span><div><strong>전문 팀</strong><p>경력 많은 전문가의 꼼꼼한 시공</p></div></li>
+        <li class="anim" data-delay="900"><span class="icon">🔥</span><div><strong>열정 가득</strong><p>작은 부분도 놓치지 않는 책임감과 열정</p></div></li>
+      </ul>
     </div>
+  </div>
+</div>
+
+
+
+
+<!-- 시공 사례 -->
+<div class="section" id="gallery">
+  <div class="inner anim">
+    <div class="gallery-header">
+  <h2>시공 사례</h2>
+  <p>
+    실제 고객님의 공간에서 진행된 <span>시공 결과</span>를 소개합니다.<br>
+    꼼꼼한 디테일과 <span>전문 기술력</span>으로 완성된 변화를 직접 확인해 보세요.
+  </p>
+</div>
+
+
+    <!-- 캐러셀 -->
+    <div class="carousel-container">
+      <button class="carousel-btn prev">&#10094;</button>
+      <div class="carousel-track">
+        <div class="carousel-item"><img src="/images/ Why Us Section.jpeg" alt="시공 사진" /></div>
+        <div class="carousel-item"><img src="/images/HeaderImg.png" alt="시공 사진" /></div>
+        <div class="carousel-item"><img src="/images/userimg.jpg" alt="시공 사진" /></div>
+        <div class="carousel-item"><img src="/images/작업전1.jpeg" alt="시공 사진" /></div>
+        <div class="carousel-item"><img src="/images/작업후2.jpeg" alt="시공 사진" /></div>
+      </div>
+      <button class="carousel-btn next">&#10095;</button>
+    </div>
+    <div class="carousel-indicator">1 / 5</div>
+  </div>
+</div>
+
+
+
+
+
+
 
     <!-- 후기 -->
-    <div class="section alt-bg" id="reviews">
-      <div class="inner reviews-grid anim">
-        <h2>후기</h2>
-        <div class="review-card anim" data-delay="100">
-          <div class="stars">⭐⭐⭐⭐⭐</div>
-          <p class="quote">"욕실이 새집처럼 변했어요! 청소도 훨씬 편리합니다."</p>
-          <p class="author">- 김민수 고객</p>
-        </div>
-        <div class="review-card anim" data-delay="200">
-          <div class="stars">⭐⭐⭐⭐⭐</div>
-          <p class="quote">"아이 키우는 집이라 위생이 걱정이었는데, 이젠 마음이 놓입니다."</p>
-          <p class="author">- 이지은 고객</p>
-        </div>
+<div class="section alt-bg" id="reviews">
+  <div class="inner anim">
+    <h2>고객 후기</h2>
+    <p class="subtitle">실제 고객님들이 남겨주신 소중한 후기입니다.</p>
+
+    <div class="reviews-grid">
+      <div class="review-card anim" data-delay="100">
+        <div class="stars">⭐⭐⭐⭐⭐</div>
+        <p class="quote">"욕실이 새집처럼 변했어요! 청소도 훨씬 편리합니다."</p>
+        <p class="author">- 김O수 고객</p>
+      </div>
+      <div class="review-card anim" data-delay="200">
+        <div class="stars">⭐⭐⭐⭐⭐</div>
+        <p class="quote">"아이 키우는 집이라 위생이 걱정이었는데, 이젠 마음이 놓입니다."</p>
+        <p class="author">- 이O은 고객</p>
+      </div>
+      <div class="review-card anim" data-delay="300">
+        <div class="stars">⭐⭐⭐⭐⭐</div>
+        <p class="quote">"시공 과정도 깔끔했고, 기사님도 친절하셨어요."</p>
+        <p class="author">- 박O수 고객</p>
+      </div>
+      <div class="review-card anim" data-delay="400">
+        <div class="stars">⭐⭐⭐⭐⭐</div>
+        <p class="quote">"친구 추천으로 했는데 정말 만족합니다. 강력 추천!"</p>
+        <p class="author">- 최O리 고객</p>
+      </div>
+      <div class="review-card anim" data-delay="500">
+        <div class="stars">⭐⭐⭐⭐⭐</div>
+        <p class="quote">"집안 분위기가 확 바뀌었어요. 너무 고급스러워요!"</p>
+        <p class="author">- 오O혁 고객</p>
+      </div>
+      <div class="review-card anim" data-delay="600">
+        <div class="stars">⭐⭐⭐⭐⭐</div>
+        <p class="quote">"A/S도 잘 해주시고, 믿을 수 있는 업체입니다."</p>
+        <p class="author">- 정O림 고객</p>
+      </div>
+      <div class="review-card anim" data-delay="700">
+        <div class="stars">⭐⭐⭐⭐⭐</div>
+        <p class="quote">"A/S도 잘 해주시고, 믿을 수 있는 업체입니다."</p>
+        <p class="author">- 정O림 고객</p>
+      </div>
+      <div class="review-card anim" data-delay="800">
+        <div class="stars">⭐⭐⭐⭐⭐</div>
+        <p class="quote">"A/S도 잘 해주시고, 믿을 수 있는 업체입니다."</p>
+        <p class="author">- 정O림 고객</p>
       </div>
     </div>
+  </div>
+</div>
+
 
     <!-- 상담 -->
     <div class="section" id="contact">
@@ -177,7 +250,6 @@
     <p>&copy; 2025 이선생줄눈. All rights reserved.</p>
   </footer>
 
-  <!-- JS -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/fullPage.js/3.1.2/fullpage.min.js"></script>
   <script src="script.js"></script>
 </body>
