@@ -11,7 +11,7 @@
   <header class="navbar">
     <div class="nav-container">
       <div class="logo"><img src="/images/HeaderImg.png" alt="이선생활줄눈" /></div>
-      <button class="menu-toggle">☰</button>
+      <button class="menu-toggle" aria-label="메뉴 열기">☰</button>
       <ul class="nav-links">
         <li><a href="#hero" class="active">메인</a></li>
         <li><a href="#services">서비스</a></li>
@@ -19,6 +19,7 @@
         <li><a href="#why-us">왜 이선생활줄눈</a></li>
         <li><a href="#gallery">시공 사례</a></li>
         <li><a href="#reviews">후기</a></li>
+        <li><a href="#contact">상담하기</a></li>
       </ul>
     </div>
   </header>
@@ -27,14 +28,15 @@
   <div id="page-container">
     <div class="sections-wrapper">
 
-      <!-- Hero -->
+      <!-- ✅ HERO (푸른빛 타일배경) -->
       <section class="section hero" id="hero">
+        <div class="hero-bg"></div>
         <div class="hero-wrapper">
-          <img src="/images/MainImg.png" alt="이선생활줄눈 메인 이미지" />
+          <img src="/images/mainimg.png" alt="이선생활줄눈 메인 이미지" class="hero-main" />
         </div>
       </section>
 
-      <!-- 서비스 -->
+      <!-- ✅ 서비스 -->
       <section class="section" id="services">
         <div class="inner">
           <h2>줄눈 시공 서비스</h2>
@@ -50,35 +52,38 @@
 
       <!-- ✅ 비교 섹션 -->
       <section class="section" id="comparison">
-        <div class="comparison-inner">
-          <div class="inner">
-            <h2>시공 비교</h2>
-            <div class="comparison-gallery">
-              <div class="comparison-item">
-                <span class="badge before">시공 전</span>
-                <img src="/images/작업전1.jpeg" alt="시공 전" />
+        <div class="inner">
+          <h2>시공 비교</h2>
+          <p class="subtitle">시공 전후를 비교해보세요!</p>
+
+          <div class="comparison-carousel">
+            <button class="cmp-btn prev" aria-label="이전">‹</button>
+            <div class="comparison-track" aria-live="polite">
+              <div class="comparison-slide">
+                <div class="comparison-item"><span class="cmp-label before">시공 전</span><img src="/images/작업전1.jpeg" alt="시공 전1" /></div>
+                <div class="comparison-item"><span class="cmp-label after">시공 후</span><img src="/images/작업후2.jpeg" alt="시공 후1" /></div>
               </div>
-              <div class="comparison-item">
-                <span class="badge after">시공 후</span>
-                <img src="/images/작업후2.jpeg" alt="시공 후" />
+              <div class="comparison-slide">
+                <div class="comparison-item"><span class="cmp-label before">시공 전</span><img src="/images/작업전2.jpeg" alt="시공 전2" /></div>
+                <div class="comparison-item"><span class="cmp-label after">시공 후</span><img src="/images/작업후3.jpeg" alt="시공 후2" /></div>
+              </div>
+              <div class="comparison-slide">
+                <div class="comparison-item"><span class="cmp-label before">시공 전</span><img src="/images/작업전3.jpeg" alt="시공 전3" /></div>
+                <div class="comparison-item"><span class="cmp-label after">시공 후</span><img src="/images/작업후4.jpeg" alt="시공 후3" /></div>
               </div>
             </div>
-            <table class="comparison-table">
-              <tr><th>항목</th><th>백시멘트 줄눈</th><th>폴리우레아 줄눈</th></tr>
-              <tr><td>내구성</td><td>❌ 쉽게 부서지고 변색</td><td>✅ 강력한 내구성</td></tr>
-              <tr><td>위생</td><td>❌ 곰팡이와 세균 서식</td><td>✅ 항균 기능</td></tr>
-              <tr><td>관리</td><td>❌ 청소 어려움</td><td>✅ 물로만 청소 가능</td></tr>
-            </table>
+            <button class="cmp-btn next" aria-label="다음">›</button>
+            <div class="cmp-indicator" aria-hidden="true"></div>
           </div>
         </div>
       </section>
 
-      <!-- 왜 이선생활줄눈 -->
+      <!-- ✅ 왜 이선생활줄눈 -->
       <section class="section" id="why-us">
         <div class="inner">
           <h2>왜 이선생활줄눈인가</h2>
           <div class="split-layout">
-            <div class="why-image-single"><img src="/images/userimg2.jpg" alt="이선생활줄눈 팀" /></div>
+            <div class="why-image-single"><img src="/images/userimg2.jpg" alt="팀 이미지" /></div>
             <div class="why-text">
               <ul class="why-list">
                 <li><span class="icon">🛡️</span>2년 보증 — 시공 후에도 안심 가능한 보증</li>
@@ -91,39 +96,49 @@
         </div>
       </section>
 
-      <!-- 시공 사례 -->
+      <!-- ✅ 시공 사례 -->
       <section class="section" id="gallery">
         <div class="inner">
-          <h2>시공 사례</h2>
+          <h2 class="gallery-title">시공 사례</h2>
           <div class="carousel-container">
-            <button class="carousel-btn prev">‹</button>
+            <button class="carousel-btn prev" aria-label="이전">‹</button>
             <div class="carousel-track">
               <div class="carousel-item"><img src="/images/작업후2.jpeg" alt="시공사례1" /></div>
               <div class="carousel-item"><img src="/images/userimg.jpg" alt="시공사례2" /></div>
               <div class="carousel-item"><img src="/images/userimg2.jpg" alt="시공사례3" /></div>
               <div class="carousel-item"><img src="/images/작업전1.jpeg" alt="시공사례4" /></div>
             </div>
-            <button class="carousel-btn next">›</button>
+            <button class="carousel-btn next" aria-label="다음">›</button>
             <div class="carousel-indicator"></div>
           </div>
         </div>
       </section>
 
-      <!-- 후기 -->
+      <!-- ✅ 후기 -->
       <section class="section" id="reviews">
         <div class="inner">
           <h2>고객 후기</h2>
-          <p class="subtitle">실제 고객님들의 소중한 후기입니다.</p>
           <div id="reviews-container" class="reviews-grid"></div>
         </div>
       </section>
 
-      <!-- 푸터 -->
-      <footer class="site-footer">
-        <div class="footer-inner">
-          <p class="footer-copy">© <span id="year"></span> 이선생활줄눈</p>
+      <!-- ✅ 상담하기 -->
+      <section class="section" id="contact">
+        <div class="inner contact-section">
+          <h2>상담하기</h2>
+          <p class="subtitle">편한 방법으로 문의주세요.</p>
+          <div class="contact-buttons">
+            <button class="contact-btn kakao">💬 카카오톡 상담</button>
+            <button class="contact-btn call">📞 전화 상담</button>
+            <button class="contact-btn blog">📗 블로그 방문</button>
+          </div>
+          <div class="biz-info">
+            이선생활줄눈 | 대표: 이영재 | 사업자등록번호: 123-45-67890<br>
+            주소: 경기도 수원시 팔달구 샘플로 123 | 연락처: 010-1234-5678<br>
+            © <span id="year"></span> 이선생활줄눈. All Rights Reserved.
+          </div>
         </div>
-      </footer>
+      </section>
 
     </div>
   </div>

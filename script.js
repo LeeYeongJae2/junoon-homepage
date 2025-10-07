@@ -1,249 +1,220 @@
-// ===== Utilities =====
+// ✅ 셀렉터 헬퍼
 const qs = (s, r=document) => r.querySelector(s);
 const qsa = (s, r=document) => Array.from(r.querySelectorAll(s));
 
 document.addEventListener("DOMContentLoaded", () => {
-  const wrapper   = qs(".sections-wrapper");
-  const sections  = qsa(".section");
-  const navLinks  = qsa(".nav-links a");
-  const total     = sections.length;
+  const sections = qsa(".section");
+  const navLinks = qsa(".nav-links a");
+  const menuToggle = qs(".menu-toggle");
+  const navList = qs(".nav-links");
+  let currentIndex = 0;
+  let isScrolling = false;
 
-  let currentIndex   = 0;
-  let wheelDelta     = 0;
-  let isLocked       = false;
-  let scrollTimeout  = null;
-
-  const SCROLL_THRESHOLD = 180;
-  const SCROLL_COOLDOWN  = 700;
-
-  const CMP_IDX = sections.findIndex(s => s.id === "comparison");
-  let cmpStopOnce = false;
-
-  // ===== Footer Year =====
-  const yearEl = qs('#year');
+  // ✅ 현재 연도 표시
+  const yearEl = qs("#year");
   if (yearEl) yearEl.textContent = new Date().getFullYear();
 
-  // ===== Active Nav =====
-  function setActiveNav(index = currentIndex) {
-    navLinks.forEach(a => a.classList.remove("active"));
-    if (navLinks[index]) navLinks[index].classList.add("active");
-  }
-  setActiveNav();
+  // ✅ 모바일 메뉴 토글
+  menuToggle?.addEventListener("click", () => {
+    navList.classList.toggle("show");
+  });
 
-  // ===== Section Height =====
-  function getSectionHeight() {
-    const header = qs("header.navbar");
-    return window.innerHeight - (header ? header.offsetHeight : 0);
-  }
-
-  // ===== Go To Section =====
-  function goToSection(index) {
-    if (index < 0 || index >= total) return;
-    currentIndex = index;
-    const h = getSectionHeight();
-
-    if (window.innerWidth > 1024) {
-      wrapper.style.transition = "transform 0.6s ease-out";
-      wrapper.style.transform  = `translateY(-${h * index}px)`;
-    } else {
-      sections[index]?.scrollIntoView({ behavior: "smooth", block: "start" });
-    }
-
-    cmpStopOnce = (index === CMP_IDX); // 비교 섹션 진입시 첫 스크롤 멈춤
-    const cmp = sections[CMP_IDX];
-    if (cmp) cmp.scrollTop = 0;
-
-    setActiveNav();
-  }
-
-  // ===== Hash 딥링크 =====
-  if (location.hash) {
-    const idx = sections.findIndex(s => `#${s.id}` === location.hash);
-    if (idx >= 0) goToSection(idx);
-  }
-
-  // ===== Wheel Scroll (Desktop Only) =====
-  window.addEventListener("wheel", (e) => {
-    if (window.innerWidth <= 1024) return; // 모바일은 네이티브 스크롤
-    e.preventDefault();
-    if (isLocked) return;
-
-    const cmpSection = sections[CMP_IDX];
-    const cmpInner   = cmpSection?.querySelector(".comparison-inner");
-
-    // 비교 섹션 내부 스크롤
-    if (currentIndex === CMP_IDX && cmpInner) {
-      const scrollable = cmpInner.scrollHeight - cmpInner.clientHeight;
-      const atTop    = cmpInner.scrollTop <= 0;
-      const atBottom = cmpInner.scrollTop >= scrollable - 1;
-
-      // 처음 진입 시 한 번 멈춤
-      if (cmpStopOnce) {
-        cmpStopOnce = false;
-        return;
-      }
-
-      if (scrollable > 5) {
-        // 내부 스크롤 허용
-        if ((e.deltaY < 0 && !atTop) || (e.deltaY > 0 && !atBottom)) {
-          cmpInner.scrollTop += e.deltaY;
-          return;
-        }
-        // 끝에 도달 시 다음/이전 섹션으로 이동
-        if (e.deltaY > 0 && atBottom) goToSection(currentIndex + 1);
-        if (e.deltaY < 0 && atTop) goToSection(currentIndex - 1);
-        return;
-      }
-    }
-
-    // 일반 섹션 전환
-    wheelDelta += e.deltaY;
-    clearTimeout(scrollTimeout);
-    scrollTimeout = setTimeout(() => (wheelDelta = 0), 60);
-
-    if (wheelDelta > SCROLL_THRESHOLD) {
-      isLocked = true;
-      goToSection(currentIndex + 1);
-      setTimeout(() => { isLocked = false; wheelDelta = 0; }, SCROLL_COOLDOWN);
-    } else if (wheelDelta < -SCROLL_THRESHOLD) {
-      isLocked = true;
-      goToSection(currentIndex - 1);
-      setTimeout(() => { isLocked = false; wheelDelta = 0; }, SCROLL_COOLDOWN);
-    }
-  }, { passive: false });
-
-  // ===== Nav Click / Mobile Menu =====
-  const navList   = qs(".nav-links");
-  const menuToggle = qs(".menu-toggle");
-
+  // ✅ 메뉴 클릭 시 해당 섹션 이동
   navLinks.forEach((a, i) => {
     a.addEventListener("click", (e) => {
       e.preventDefault();
-      if (window.innerWidth > 1024) goToSection(i);
-      else qs(a.getAttribute("href"))?.scrollIntoView({ behavior: "smooth" });
-      navList?.classList.remove("show");
-      menuToggle?.setAttribute("aria-expanded", "false");
+      const target = qs(a.getAttribute("href"));
+      if (target) target.scrollIntoView({ behavior: "smooth" });
+      navLinks.forEach(n => n.classList.remove("active"));
+      a.classList.add("active");
+      navList.classList.remove("show");
     });
   });
 
-  menuToggle?.addEventListener("click", () => {
-    const isOpen = navList?.classList.toggle("show");
-    menuToggle.setAttribute("aria-expanded", String(!!isOpen));
-  });
-
-  // ===== Intersection Observer (모바일용 Active Nav 동기화) =====
+  // ✅ IntersectionObserver로 현재 섹션 감지
   const io = new IntersectionObserver((entries) => {
-    const visible = entries
-      .filter(e => e.isIntersecting)
-      .sort((a,b)=> b.intersectionRatio - a.intersectionRatio)[0];
+    const visible = entries.find(e => e.isIntersecting);
     if (!visible) return;
     const idx = sections.indexOf(visible.target);
-    if (idx >= 0) { currentIndex = idx; setActiveNav(idx); }
-  }, { rootMargin: "-30% 0px -60% 0px", threshold: [0, .25, .5, .75, 1] });
+    if (idx >= 0) {
+      currentIndex = idx;
+      navLinks.forEach(n => n.classList.remove("active"));
+      if (navLinks[idx]) navLinks[idx].classList.add("active");
+    }
+  }, { threshold: 0.6 });
   sections.forEach(s => io.observe(s));
 
-  // ===== Carousel =====
-  const track      = qs(".carousel-track");
-  const items      = qsa(".carousel-item");
-  const prevBtn    = qs(".carousel-btn.prev");
-  const nextBtn    = qs(".carousel-btn.next");
-  const indicator  = qs(".carousel-indicator");
-
-  let slideIndex = 0;
-  let startX = 0, curX = 0, dragging = false;
-
-  function getGapPx() { return parseFloat(getComputedStyle(track).gap || "0") || 0; }
-  function measure() {
-    const first    = items[0];
-    const viewport = track?.parentElement;
-    return {
-      itemW: first ? first.getBoundingClientRect().width : 0,
-      gap:   track ? getGapPx() : 0,
-      viewW: viewport ? viewport.clientWidth : 0,
-    };
-  }
-  function calcItemsPerView() {
-    const { itemW, gap, viewW } = measure();
-    if (!itemW || !viewW) return 1;
-    return Math.max(1, Math.floor((viewW + gap) / (itemW + gap)));
-  }
-  function stepPx() { const { itemW, gap } = measure(); return itemW + gap; }
-  function maxIndex() { return Math.max(items.length - calcItemsPerView(), 0); }
-
-  function updateCarousel() {
-    const step = stepPx();
-    const max  = maxIndex();
-    slideIndex = Math.min(Math.max(slideIndex, 0), max);
-    if (track) {
-      track.style.transition = "transform 0.4s ease";
-      track.style.transform  = `translateX(-${step * slideIndex}px)`;
+  // ✅ 데스크톱 풀페이지 스크롤 (한 번에 한 섹션만 이동)
+  let scrollTimer = null;
+  let scrollDelta = 0;
+  window.addEventListener("wheel", (e) => {
+    if (window.innerWidth < 1025) return;
+    e.preventDefault();
+    if (isScrolling) return;
+    scrollDelta += e.deltaY;
+    clearTimeout(scrollTimer);
+    scrollTimer = setTimeout(() => { scrollDelta = 0; }, 100);
+    if (scrollDelta > 100) {
+      isScrolling = true;
+      currentIndex = Math.min(currentIndex + 1, sections.length - 1);
+      sections[currentIndex].scrollIntoView({ behavior: "smooth" });
+      scrollDelta = 0;
+      setTimeout(() => isScrolling = false, 900);
+    } else if (scrollDelta < -100) {
+      isScrolling = true;
+      currentIndex = Math.max(currentIndex - 1, 0);
+      sections[currentIndex].scrollIntoView({ behavior: "smooth" });
+      scrollDelta = 0;
+      setTimeout(() => isScrolling = false, 900);
     }
-    if (indicator) indicator.textContent = `${slideIndex + 1} / ${items.length}`;
-  }
-  function movePrev() { slideIndex -= 1; updateCarousel(); }
-  function moveNext() { slideIndex += 1; updateCarousel(); }
+  }, { passive: false });
 
-  prevBtn?.addEventListener("click", movePrev);
-  nextBtn?.addEventListener("click", moveNext);
-
-  // 드래그/스와이프
-  function startDrag(e){
-    if (!track) return;
-    dragging = true;
-    startX = e.touches ? e.touches[0].clientX : e.clientX;
-    track.style.transition = "none";
-  }
-  function onDrag(e){
-    if (!dragging || !track) return;
-    curX = e.touches ? e.touches[0].clientX : e.clientX;
-    const dx = curX - startX;
-    const step = stepPx();
-    track.style.transform = `translateX(calc(-${step * slideIndex}px + ${dx}px))`;
-  }
-  function endDrag(){
-    if (!dragging) return;
-    dragging = false;
-    const dx = curX - startX;
-    const threshold = 60;
-    if (Math.abs(dx) > threshold) (dx < 0 ? moveNext() : movePrev());
-    else updateCarousel();
-  }
-  track?.addEventListener("mousedown", startDrag);
-  track?.addEventListener("mousemove", onDrag);
-  track?.addEventListener("mouseup", endDrag);
-  track?.addEventListener("mouseleave", endDrag);
-  track?.addEventListener("touchstart", startDrag, { passive: true });
-  track?.addEventListener("touchmove", onDrag, { passive: true });
-  track?.addEventListener("touchend", endDrag);
-
-  // 키보드 접근성
-  track?.setAttribute("tabindex", "0");
-  track?.addEventListener("keydown", (e) => {
-    if (e.key === "ArrowLeft")  { e.preventDefault(); movePrev(); }
-    if (e.key === "ArrowRight") { e.preventDefault(); moveNext(); }
-    if (e.key === "Home")       { e.preventDefault(); slideIndex = 0; updateCarousel(); }
-    if (e.key === "End")        { e.preventDefault(); slideIndex = maxIndex(); updateCarousel(); }
+  // ✅ 모바일 스와이프 이동
+  let startY = 0, endY = 0;
+  window.addEventListener("touchstart", e => startY = e.touches[0].clientY);
+  window.addEventListener("touchend", e => {
+    endY = e.changedTouches[0].clientY;
+    const diff = startY - endY;
+    if (Math.abs(diff) < 60) return;
+    if (diff > 0) currentIndex = Math.min(currentIndex + 1, sections.length - 1);
+    else currentIndex = Math.max(currentIndex - 1, 0);
+    sections[currentIndex].scrollIntoView({ behavior: "smooth" });
   });
 
-  // 최초/리사이즈/로드 시 재계산
-  window.addEventListener("resize", updateCarousel);
-  window.addEventListener("load", updateCarousel);
+  // ---------------- 시공 사례 캐러셀 ----------------
+  const track = qs(".carousel-track");
+  const items = qsa(".carousel-item");
+  const prevBtn = qs(".carousel-btn.prev");
+  const nextBtn = qs(".carousel-btn.next");
+  const indicator = qs(".carousel-indicator");
+  let slideIndex = 0;
+
+  function updateCarousel() {
+    const width = items[0]?.offsetWidth || 0;
+    const gap = parseFloat(getComputedStyle(track).gap) || 0;
+    track.style.transition = "transform .4s ease";
+    track.style.transform = `translateX(-${slideIndex * (width + gap)}px)`;
+    if (indicator) indicator.textContent = `${slideIndex + 1} / ${items.length}`;
+  }
+  prevBtn?.addEventListener("click", () => { slideIndex = Math.max(0, slideIndex - 1); updateCarousel(); });
+  nextBtn?.addEventListener("click", () => { slideIndex = Math.min(items.length - 1, slideIndex + 1); updateCarousel(); });
+  setInterval(() => { slideIndex = (slideIndex + 1) % items.length; updateCarousel(); }, 4000);
   updateCarousel();
 
-  // ===== 후기 렌더링 =====
+  // 드래그/터치 이동
+  let dragStartX = 0, isDragging = false;
+  track.addEventListener("mousedown", e => { isDragging = true; dragStartX = e.clientX; track.style.transition = "none"; });
+  window.addEventListener("mouseup", () => isDragging = false);
+  window.addEventListener("mousemove", e => {
+    if (!isDragging) return;
+    const diff = e.clientX - dragStartX;
+    if (Math.abs(diff) > 80) {
+      if (diff < 0) nextBtn.click(); else prevBtn.click();
+      isDragging = false;
+    }
+  });
+  track.addEventListener("touchstart", e => dragStartX = e.touches[0].clientX);
+  track.addEventListener("touchend", e => {
+    const diff = dragStartX - e.changedTouches[0].clientX;
+    if (Math.abs(diff) > 60) {
+      if (diff > 0) nextBtn.click(); else prevBtn.click();
+    }
+  });
+
+  // ✅ 이미지 클릭 이동
+  qsa(".carousel-item img").forEach(img => {
+    img.addEventListener("click", () => {
+      slideIndex = (slideIndex + 1) % items.length;
+      updateCarousel();
+    });
+  });
+
+  // ---------------- 비교 섹션 캐러셀 (시공사례처럼 개선) ----------------
+  const cmpTrack = qs(".comparison-track");
+  const cmpSlides = qsa(".comparison-slide");
+  const cmpPrev = qs(".cmp-btn.prev");
+  const cmpNext = qs(".cmp-btn.next");
+  const cmpInd = qs(".cmp-indicator");
+  let cmpIndex = 0;
+
+  function updateComparison() {
+    const width = cmpSlides[0]?.offsetWidth || 0;
+    const gap = parseFloat(getComputedStyle(cmpTrack).gap) || 0;
+    cmpTrack.style.transition = "transform .45s ease";
+    cmpTrack.style.transform = `translateX(-${cmpIndex * (width + gap)}px)`;
+    if (cmpInd) cmpInd.textContent = `${cmpIndex + 1} / ${cmpSlides.length}`;
+  }
+
+  cmpPrev?.addEventListener("click", () => { cmpIndex = (cmpIndex - 1 + cmpSlides.length) % cmpSlides.length; updateComparison(); });
+  cmpNext?.addEventListener("click", () => { cmpIndex = (cmpIndex + 1) % cmpSlides.length; updateComparison(); });
+
+  // ✅ 클릭 시 이동
+  qsa(".comparison-item img").forEach(img => {
+    img.addEventListener("click", () => {
+      cmpIndex = (cmpIndex + 1) % cmpSlides.length;
+      updateComparison();
+    });
+  });
+
+  // ✅ 드래그 / 터치 이동
+  let cmpStartX = 0;
+  let cmpDragging = false;
+
+  cmpTrack.addEventListener("mousedown", e => {
+    cmpDragging = true;
+    cmpStartX = e.clientX;
+    cmpTrack.style.transition = "none";
+  });
+  window.addEventListener("mouseup", () => cmpDragging = false);
+  window.addEventListener("mousemove", e => {
+    if (!cmpDragging) return;
+    const dx = e.clientX - cmpStartX;
+    if (Math.abs(dx) > 70) {
+      cmpIndex += dx < 0 ? 1 : -1;
+      cmpIndex = (cmpIndex + cmpSlides.length) % cmpSlides.length;
+      cmpDragging = false;
+      updateComparison();
+    }
+  });
+
+  cmpTrack.addEventListener("touchstart", e => cmpStartX = e.touches[0].clientX);
+  cmpTrack.addEventListener("touchend", e => {
+    const dx = cmpStartX - e.changedTouches[0].clientX;
+    if (Math.abs(dx) > 50) {
+      cmpIndex += dx > 0 ? 1 : -1;
+      cmpIndex = (cmpIndex + cmpSlides.length) % cmpSlides.length;
+      updateComparison();
+    }
+  });
+
+  updateComparison();
+
+  // ---------------- 후기 자동 생성 ----------------
   const reviews = [
     { stars: 5, quote: "욕실이 새집처럼 변했어요!", author: "김O수 고객" },
-    { stars: 5, quote: "아이 키우는 집이라 위생이 걱정이었는데, 이젠 마음이 놓입니다.", author: "이O은 고객" },
-    { stars: 5, quote: "시공 과정도 깔끔했고, 기사님도 친절하셨어요.", author: "박O수 고객" },
-    { stars: 5, quote: "집안 분위기가 확 바뀌었어요. 너무 고급스러워요!", author: "오O혁 고객" }
+    { stars: 5, quote: "아이 키우는 집이라 위생 걱정이 사라졌어요!", author: "이O은 고객" },
+    { stars: 5, quote: "시공도 깔끔하고 상담도 친절했습니다.", author: "박O수 고객" },
+    { stars: 5, quote: "집이 훨씬 고급스러워졌어요.", author: "오O혁 고객" },
   ];
-  const container = qs("#reviews-container");
-  if (container) {
-    container.innerHTML = reviews.map(r => `
-      <article class="review-card" aria-label="고객 후기">
-        <div class="stars" aria-hidden="true">${"⭐".repeat(r.stars)}</div>
+  const reviewContainer = qs("#reviews-container");
+  if (reviewContainer) {
+    reviewContainer.innerHTML = reviews.map(r => `
+      <div class="review-card">
+        <div class="stars">${"⭐".repeat(r.stars)}</div>
         <p class="quote">"${r.quote}"</p>
         <p class="author">- ${r.author}</p>
-      </article>`).join("");
+      </div>
+    `).join("");
   }
+
+  // ---------------- 상담 버튼 클릭 ----------------
+  qsa(".contact-btn.kakao").forEach(btn => {
+    btn.addEventListener("click", () => window.open("https://pf.kakao.com/_yourid", "_blank"));
+  });
+  qsa(".contact-btn.call").forEach(btn => {
+    btn.addEventListener("click", () => window.location.href = "tel:010-9593-7665");
+  });
+  qsa(".contact-btn.blog").forEach(btn => {
+    btn.addEventListener("click", () => window.open("https://blog.naver.com/yourblog", "_blank"));
+  });
 });
