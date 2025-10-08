@@ -171,6 +171,7 @@ h2 { font-size: 2rem; margin-bottom: 18px; color: var(--primary); }
   padding: 100px 20px;
   overflow: hidden;
 }
+
 .comparison-carousel {
   position: relative;
   overflow: hidden;
@@ -182,8 +183,20 @@ h2 { font-size: 2rem; margin-bottom: 18px; color: var(--primary); }
   border-radius: 28px;
   box-shadow: 0 10px 30px rgba(0, 40, 120, 0.08);
 }
-.comparison-track { display: flex; transition: transform .5s ease; }
-.comparison-slide { flex: 0 0 100%; display: grid; grid-template-columns: repeat(2, 1fr); gap: 30px; align-items: stretch; }
+
+.comparison-track {
+  display: flex;
+  transition: transform .5s ease;
+}
+
+.comparison-slide {
+  flex: 0 0 100%;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 30px;
+  align-items: stretch;
+}
+
 .comparison-item {
   position: relative;
   border-radius: 18px;
@@ -192,9 +205,13 @@ h2 { font-size: 2rem; margin-bottom: 18px; color: var(--primary); }
   box-shadow: 0 8px 22px rgba(0,0,0,.08);
   border: 1px solid rgba(200, 220, 255, 0.4);
   transition: transform 0.3s ease, box-shadow 0.3s ease;
-  margin: 0 20px; /* 좌우 여백 살짝 확보 (기존엔 0) */
+  margin: 0 20px; /* 좌우 여백 살짝 확보 */
 }
-.comparison-item:hover { transform: scale(1.02); box-shadow: 0 14px 36px rgba(0, 70, 200, 0.2); }
+.comparison-item:hover {
+  transform: scale(1.02);
+  box-shadow: 0 14px 36px rgba(0, 70, 200, 0.2);
+}
+
 .comparison-item img {
   width: 100%;
   height: auto;
@@ -204,11 +221,85 @@ h2 { font-size: 2rem; margin-bottom: 18px; color: var(--primary); }
   user-select: none;
   -webkit-user-drag: none;
 }
-.cmp-label { position: absolute; top: 14px; left: 16px; padding: 8px 14px; border-radius: 14px; font-size: 13px; font-weight: 700; color: #fff; background: rgba(0, 60, 255, 0.7); backdrop-filter: blur(4px); }
-.cmp-label.after { background: rgba(0, 200, 120, 0.8); }
-.cmp-btn { position: absolute; top: 50%; transform: translateY(-50%); background: linear-gradient(135deg, #007bff, #0040b3); color: #fff; border: 0; width: 46px; height: 46px; border-radius: 50%; font-size: 20px; cursor: pointer; z-index: 5; box-shadow: 0 4px 14px rgba(0, 60, 200, 0.3); }
-.cmp-btn.prev { left: 10px; } .cmp-btn.next { right: 10px; }
-.cmp-indicator { text-align: center; margin-top: 18px; font-size: 15px; font-weight: 600; color: #0040b3; }
+
+.cmp-label {
+  position: absolute;
+  top: 14px;
+  left: 16px;
+  padding: 8px 14px;
+  border-radius: 14px;
+  font-size: 13px;
+  font-weight: 700;
+  color: #fff;
+  background: rgba(0, 60, 255, 0.7);
+  backdrop-filter: blur(4px);
+}
+.cmp-label.after {
+  background: rgba(0, 200, 120, 0.8);
+}
+
+/* ---------------- 하단 네모형 버튼 + 인디케이터 ---------------- */
+.cmp-controls {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 18px;
+  margin-top: 28px;
+  flex-wrap: wrap;
+}
+
+/* ✅ 화이트+파란 테두리형 버튼 (시공사례와 구분용) */
+.cmp-btn {
+  background: #fff;
+  color: #0040b3;
+  border: 2px solid #0040b3;
+  padding: 10px 24px;
+  border-radius: 10px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  box-shadow: 0 4px 10px rgba(0, 60, 200, 0.1);
+  transition: all 0.25s ease;
+}
+.cmp-btn:hover {
+  background: #0040b3;
+  color: #fff;
+  transform: translateY(-2px);
+}
+
+/* ✅ 인디케이터 */
+.cmp-indicator {
+  font-size: 15px;
+  font-weight: 600;
+  color: #0040b3;
+  min-width: 70px;
+  text-align: center;
+}
+
+/* ---------------- 반응형 ---------------- */
+@media (max-width: 1024px) {
+  .comparison-slide {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+  .comparison-item {
+    margin: 0 auto;
+    max-width: 500px;
+  }
+  .comparison-item img {
+    max-height: 360px;
+    object-fit: contain;
+  }
+}
+
+@media (max-width: 600px) {
+  #comparison { padding: 80px 12px; }
+  .comparison-carousel { padding: 20px 10px; }
+  .cmp-controls { gap: 12px; margin-top: 20px; }
+  .cmp-btn { padding: 8px 16px; font-size: 15px; }
+  .cmp-indicator { font-size: 14px; min-width: 60px; }
+}
+
 
 /* ---------------- 왜 이선생활줄눈 ---------------- */
 #why-us {
@@ -286,46 +377,51 @@ h2 { font-size: 2rem; margin-bottom: 18px; color: var(--primary); }
   width: 100%;
   max-width: 1300px;
   margin: 0 auto;
-  padding: 40px 0;
-  background: rgba(255, 255, 255, 0.85);
+  padding: 40px 0 80px; /* 버튼 아래 여백 확보 */
+  background: rgba(255, 255, 255, 0.88);
   border-radius: 26px;
   border: 1px solid rgba(190, 210, 255, 0.4);
   box-shadow: 0 12px 30px rgba(0, 50, 150, 0.08);
 }
 
+/* ✅ 트랙 (중앙 이동 정확도 개선) */
 .carousel-track {
   display: flex;
   align-items: center;
+  justify-content: flex-start; /* ✅ 중앙정렬 제거 → JS에서 translate로 중앙 계산 */
   gap: 28px;
-  transition: transform 0.5s ease;
+  transition: transform 0.6s ease;
   padding: 0 5vw;
   box-sizing: border-box;
+  will-change: transform;
 }
 
+/* ✅ 기본 아이템 */
 .carousel-item {
-  flex: 0 0 90%;
+  flex: 0 0 auto;              /* ✅ 한 장 단위로 이동 */
+  width: 90%;                  /* ✅ 반응형 고려 (JS에서 정확히 계산됨) */
   max-width: 600px;
   border-radius: 22px;
   overflow: hidden;
   position: relative;
   background: #fff;
   border: 1px solid rgba(220, 230, 255, 0.4);
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.06);
   transition: all 0.5s ease;
-  transform: scale(0.9);
-  opacity: 0.5;
-  filter: blur(2px);
+  transform: scale(0.88);
+  opacity: 0.55;
+  filter: blur(2px) brightness(0.85);
 }
 
-/* ✅ 중앙 강조 효과 */
+/* ✅ 중앙 활성 아이템 (밝기 + 선명도 + 확대) */
 .carousel-item.active {
   transform: scale(1);
   opacity: 1;
-  filter: blur(0);
+  filter: blur(0) brightness(1.1);
   z-index: 3;
-  box-shadow: 0 12px 36px rgba(0, 86, 179, 0.2);
+  box-shadow: 0 14px 36px rgba(0, 86, 179, 0.25);
+  transition: all 0.6s cubic-bezier(0.25, 1, 0.3, 1);
 }
-
 
 
 /* ✅ 이미지 */
@@ -337,38 +433,64 @@ h2 { font-size: 2rem; margin-bottom: 18px; color: var(--primary); }
   pointer-events: none;
   user-select: none;
   -webkit-user-drag: none;
-  transition: all 0.4s ease;
+  transition: transform 0.4s ease, filter 0.4s ease;
 }
 
-/* ✅ 버튼 */
-.carousel-btn {
+/* ✅ 하단 네모형 버튼 + 인디케이터 */
+.carousel-controls {
   position: absolute;
-  top: 50%;
-  transform: translateY(-50%);
-  background: linear-gradient(135deg, #007bff, #0040b3);
-  border: none;
-  color: #fff;
-  width: 46px;
-  height: 46px;
-  cursor: pointer;
-  border-radius: 50%;
-  font-size: 20px;
+  bottom: 24px; /* ✅ 컨테이너 안에서 고정 */
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 18px;
   z-index: 10;
-  box-shadow: 0 4px 14px rgba(0, 60, 200, 0.3);
+  background: rgba(255, 255, 255, 0.6);
+  backdrop-filter: blur(10px);
+  border-radius: 14px;
+  padding: 10px 20px;
+  box-shadow: 0 4px 16px rgba(0, 64, 179, 0.08);
 }
-.carousel-btn.prev { left: 20px; }
-.carousel-btn.next { right: 20px; }
 
-/* ✅ 인디케이터 */
-.carousel-indicator {
-  text-align: center;
-  margin-top: 24px;
+/* ✅ 버튼 디자인 */
+.carousel-controls .carousel-btn {
+  background: #fff;
+  color: #0040b3;
+  border: 2px solid #0040b3;
+  padding: 8px 20px;
+  border-radius: 10px;
   font-size: 15px;
   font-weight: 600;
-  color: #0040b3;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  box-shadow: 0 3px 8px rgba(0, 60, 200, 0.1);
 }
 
-/* ---------------- 반응형 시공사례 ---------------- */
+.carousel-controls .carousel-btn:hover {
+  background: #0040b3;
+  color: #fff;
+  transform: translateY(-2px);
+}
+
+.carousel-controls .carousel-btn:active {
+  transform: scale(0.97);
+  background: #003b9f;
+  color: #fff;
+}
+
+/* ✅ 인디케이터 */
+.carousel-controls .carousel-indicator {
+  color: #0040b3;
+  font-weight: 700;
+  font-size: 15px;
+  min-width: 60px;
+  text-align: center;
+  letter-spacing: 0.5px;
+}
+
+/* ---------------- 반응형 ---------------- */
 @media (max-width: 1024px) {
   #gallery { padding: 80px 14px; }
 
@@ -380,42 +502,71 @@ h2 { font-size: 2rem; margin-bottom: 18px; color: var(--primary); }
   .carousel-item {
     flex: 0 0 95%;
     border-radius: 18px;
-    transform: scale(0.95);
+    transform: scale(0.94);
+    opacity: 0.7;
+    filter: blur(1.2px) brightness(0.9);
   }
 
   .carousel-item.active {
     transform: scale(1);
+    opacity: 1;
+    filter: blur(0) brightness(1.1);
   }
 
-  .carousel-item img {
-    max-height: 60vh;
-    object-fit: contain;
+  .carousel-controls {
+    position: static;
+    margin-top: 20px;
+    background: transparent;
+    box-shadow: none;
   }
 
-  .carousel-btn {
-    width: 40px;
-    height: 40px;
-    font-size: 18px;
-  }
-
-  .carousel-indicator {
-    font-size: 0.9rem;
-    margin-top: 16px;
+  .carousel-controls .carousel-btn {
+    font-size: 14px;
+    padding: 7px 16px;
   }
 }
 
 @media (max-width: 480px) {
   #gallery { padding: 70px 12px; }
-  .carousel-track { gap: 12px; padding: 0 3vw; }
+
+  .carousel-track {
+    gap: 12px;
+    padding: 0 3vw;
+  }
+
   .carousel-item {
     flex: 0 0 100%;
     border-radius: 14px;
-    transform: scale(0.97);
+    transform: scale(0.96);
+    opacity: 0.75;
+    filter: blur(1px) brightness(0.95);
   }
+
   .carousel-item.active {
     transform: scale(1);
+    opacity: 1;
+    filter: blur(0) brightness(1.1);
   }
-  .carousel-item img { max-height: 50vh; object-fit: contain; }
+
+  .carousel-item img {
+    max-height: 50vh;
+    object-fit: contain;
+  }
+
+  .carousel-controls {
+    flex-direction: row;
+    gap: 10px;
+    margin-top: 16px;
+  }
+
+  .carousel-controls .carousel-btn {
+    font-size: 13px;
+    padding: 6px 12px;
+  }
+
+  .carousel-controls .carousel-indicator {
+    font-size: 13px;
+  }
 }
 
 

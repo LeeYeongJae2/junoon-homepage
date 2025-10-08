@@ -20,26 +20,18 @@ document.addEventListener("DOMContentLoaded", () => {
       document.documentElement.style.setProperty("--vh", `${window.innerHeight * 0.01}px`);
     }
   };
-
-  // 초기 1회 실행
   fixVH();
-
-  // ✅ 리사이즈 / 방향전환 / 스크롤(주소창 표시 변화) 감지
   ["resize", "orientationchange"].forEach(evt =>
     window.addEventListener(evt, () => setTimeout(fixVH, 200))
   );
-
   window.addEventListener("load", () => {
     fixVH();
-    setTimeout(fixVH, 500); // ✅ 주소창 애니메이션 완료 후 한 번 더 계산
+    setTimeout(fixVH, 500);
   });
-
   if (window.visualViewport) {
     window.visualViewport.addEventListener("resize", () => setTimeout(fixVH, 200));
     window.visualViewport.addEventListener("scroll", () => setTimeout(fixVH, 200));
   }
-
-  // ✅ 페이지 로드 완료 시 한 번 더 보정
   window.addEventListener("load", () => setTimeout(fixVH, 300));
 
   // ==========================================================
@@ -92,30 +84,36 @@ document.addEventListener("DOMContentLoaded", () => {
   let slideIndex = 0;
 
   function updateCarousel() {
-    if (!items.length) return;
+  if (!items.length) return;
 
-    const container = track.parentElement;
-    const containerWidth = container.offsetWidth;
-    const itemWidth = items[0].offsetWidth;
-    const gap = parseFloat(getComputedStyle(track).gap) || 0;
-    const trackPadding = parseFloat(getComputedStyle(track).paddingLeft) || 0;
+  const container = track.parentElement;
+  const containerWidth = container.offsetWidth;
+  const itemWidth = items[0].offsetWidth;
+  const gap = parseFloat(getComputedStyle(track).gap) || 0;
 
-    // ✅ 중앙 정렬 정확도 보정 (패딩 포함)
-    const centerOffset = (containerWidth - itemWidth) / 2 - trackPadding / 2;
-    const baseTranslate = slideIndex * (itemWidth + gap);
+  // ✅ 중앙 정렬 계산 (패딩 보정 제거, 실제 픽셀 기준)
+  const centerOffset = (containerWidth - itemWidth) / 2;
+  const baseTranslate = slideIndex * (itemWidth + gap);
 
-    // ✅ 트랜지션 이동
-    track.style.transition = "transform 0.6s ease";
-    track.style.transform = `translateX(${centerOffset - baseTranslate}px)`;
+  // ✅ 부드러운 이동
+  track.style.transition = "transform 0.6s ease";
+  track.style.transform = `translateX(${centerOffset - baseTranslate}px)`;
 
-    // ✅ 인디케이터 업데이트
-    if (indicator) indicator.textContent = `${slideIndex + 1} / ${items.length}`;
+  // ✅ 인디케이터 업데이트
+  if (indicator) indicator.textContent = `${slideIndex + 1} / ${items.length}`;
 
-    // ✅ 활성 강조 클래스 처리
-    items.forEach((item, i) => {
-      item.classList.toggle("active", i === slideIndex);
-    });
-  }
+  // ✅ 강조 효과 적용
+  items.forEach((item, i) => {
+    if (i === slideIndex) {
+      item.classList.add("active");
+      item.style.zIndex = "3";
+    } else {
+      item.classList.remove("active");
+      item.style.zIndex = "1";
+    }
+  });
+}
+
 
   // ✅ 순환 이동 버튼
   prevBtn?.addEventListener("click", () => {
@@ -186,7 +184,7 @@ document.addEventListener("DOMContentLoaded", () => {
     updateComparison();
   });
 
-  // 드래그/스와이프
+  // ✅ 드래그 / 스와이프
   let cmpStartX = 0, cmpDragging = false;
   cmpTrack?.addEventListener("mousedown", (e) => {
     cmpDragging = true;
