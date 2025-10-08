@@ -1,7 +1,13 @@
 :root {
-  --navH: 72px;
+  --vh: 1vh;
   --primary: #0056b3;
   --dark-bg: #0b1e3d;
+}
+
+@supports (-webkit-touch-callout: none) {
+  :root {
+    --vh: 1vh;
+  }
 }
 
 /* ---------------- 기본 리셋 ---------------- */
@@ -61,14 +67,74 @@ header.navbar {
 }
 
 /* ---------------- 섹션 기본 ---------------- */
+
+
+/* 섹션 높이 보정 */
 .section {
-  height: calc(100vh - var(--navH));
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
+  min-height: calc(var(--vh, 1vh) * 100 - var(--navH));
+  height: auto;
+  scroll-margin-top: var(--navH);
+  padding: 100px 20px;
+}
+
+/* 태블릿 */
+@media (max-width: 1024px) {
+  .section {
+    min-height: calc(var(--vh, 1vh) * 100 - var(--navH) + 60px);
+    padding: 80px 18px;
+  }
+}
+
+/* 모바일 */
+@media (max-width: 768px) {
+  .section {
+    min-height: calc(max(var(--vh, 1vh) * 100, 100vh) - var(--navH) + 100px);
+    height: auto;
+    padding: 80px 14px;
+  }
+}
+
+/* 초소형 */
+@media (max-width: 480px) {
+  .section {
+    padding: 70px 12px;
+  }
+}
+
+/* =========================================================
+   [2025-10-10] 시공사례 & 비교 이미지 비율 유지
+   ========================================================= */
+
+/* 비교 섹션 이미지 비율 고정 */
+#comparison .comparison-item {
+  aspect-ratio: 4 / 3;
   overflow: hidden;
 }
+#comparison .comparison-item img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* 시공사례 섹션 이미지 비율 고정 */
+#gallery .carousel-item {
+  aspect-ratio: 4 / 3;
+  overflow: hidden;
+}
+#gallery .carousel-item img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* 반응형 시 여백 추가 */
+@media (max-width: 768px) {
+  #gallery,
+  #comparison {
+    padding: 80px 14px;
+  }
+}
+
 .inner {
   max-width: 1200px;
   margin: 0 auto;
@@ -77,6 +143,8 @@ header.navbar {
 }
 h2 { font-size: 2rem; margin-bottom: 18px; color: var(--primary); }
 .subtitle { color: #666; margin-bottom: 28px; }
+
+
 
 /* ---------------- HERO ---------------- */
 .section.hero {
@@ -97,6 +165,7 @@ h2 { font-size: 2rem; margin-bottom: 18px; color: var(--primary); }
   position: relative; z-index: 1;
   display: flex; align-items: center; justify-content: center;
   padding: 4rem 1rem;
+  margin-top: 72px;
 }
 .hero-main {
   width: min(92%,560px);
@@ -402,6 +471,9 @@ h2 { font-size: 2rem; margin-bottom: 18px; color: var(--primary); }
 .carousel-btn.prev { left: 20px; }
 .carousel-btn.next { right: 20px; }
 .carousel-indicator { text-align: center; margin-top: 24px; font-size: 15px; font-weight: 600; color: #0040b3; }
+
+
+
 
 
 /* ---------------- 후기 섹션 (유리질감 + 반사광 효과) ---------------- */
@@ -752,52 +824,6 @@ h2 { font-size: 2rem; margin-bottom: 18px; color: var(--primary); }
   #contact .call-text { display: flex; }
 }
 
-/* ====== [2025-10-08 안정화 패치] 이미지 & 모바일 높이 개선 ====== */
-
-/* 1️⃣ 섹션 높이 보정 — 모바일에서 내용 가려지는 문제 해결 */
-@media (max-width: 768px) {
-  .section {
-    min-height: calc(100vh - var(--navH) + 120px); /* ✅ 높이 여유 확보 */
-  }
-}
-
-/* 2️⃣ 이미지 섹션 비율 안정화 (비교 / 갤러리 / 왜 이선생활줄눈) */
-
-/* 비교 섹션 */
-#comparison .comparison-item {
-  aspect-ratio: 4 / 3;
-  overflow: hidden;
-}
-#comparison .comparison-item img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
-
-/* 시공 사례 */
-#gallery .carousel-item {
-  aspect-ratio: 4 / 3;
-  overflow: hidden;
-}
-#gallery .carousel-item img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
-
-/* 왜 이선생활줄눈 단일 이미지 */
-#why-us .why-image-single img {
-  width: 100%;
-  height: auto;
-  max-width: 550px;
-  object-fit: contain;
-}
-
-/* 3️⃣ 스크롤 위치 보정 — 헤더에 섹션 제목 가려짐 방지 */
-.section {
-  scroll-margin-top: var(--navH);
-}
-
 
 /* ---------------- 반응형 (원본 그대로) ---------------- */
 @media (max-width: 1024px) {
@@ -822,8 +848,6 @@ h2 { font-size: 2rem; margin-bottom: 18px; color: var(--primary); }
   h2 { font-size: 1.4rem; }
   .inner { padding: 60px 16px; }
   .hero-main { width: 90%; }
-  .carousel-item img { max-height: 260px; }
-  .comparison-item img { max-height: 260px; }
   #services .service-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr)); /* iOS overflow 방지 */
     gap: 20px;
@@ -839,3 +863,5 @@ h2 { font-size: 2rem; margin-bottom: 18px; color: var(--primary); }
   .contact-btn { width: 100%; justify-content: center; }
   
 }
+
+
