@@ -90,7 +90,7 @@ h2 { font-size: 2rem; margin-bottom: 18px; color: var(--primary); }
   position: absolute; inset: 0;
   background:
     radial-gradient(circle at 50% 20%, rgba(100,160,255,.4) 0%, rgba(0,30,60,.9) 60%, rgba(0,10,30,1) 100%),
-    url('/images/mainimg2.png') center/cover no-repeat;
+    url('./images/mainimg2.png') center/cover no-repeat;
   filter: brightness(.85) saturate(1.1);
 }
 .hero-wrapper {
@@ -799,9 +799,6 @@ h2 { font-size: 2rem; margin-bottom: 18px; color: var(--primary); }
 }
 
 
-
-
-
 /* ---------------- 반응형 (원본 그대로) ---------------- */
 @media (max-width: 1024px) {
   h2 { font-size: 1.7rem; }
@@ -824,17 +821,21 @@ h2 { font-size: 2rem; margin-bottom: 18px; color: var(--primary); }
 @media (max-width: 768px) {
   h2 { font-size: 1.4rem; }
   .inner { padding: 60px 16px; }
-  .service-grid { grid-template-columns: 1fr 1fr; }
-  .service-card { padding: 20px; }
   .hero-main { width: 90%; }
   .carousel-item img { max-height: 260px; }
   .comparison-item img { max-height: 260px; }
+  #services .service-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr)); /* iOS overflow 방지 */
+    gap: 20px;
+  }
+  #services .service-card { padding: 24px; }
+
 }
 
 @media (max-width: 480px) {
   h2 { font-size: 1.2rem; }
-  .service-grid { grid-template-columns: 1fr; }
   .hero-main { width: 100%; }
   .contact-buttons { flex-direction: column; gap: 12px; }
   .contact-btn { width: 100%; justify-content: center; }
+  
 }

@@ -10,6 +10,17 @@ document.addEventListener("DOMContentLoaded", () => {
   let currentIndex = 0;
   let isScrolling  = false;
 
+  // ✅ 모바일 Safari vh 보정
+  const fixVH = () => {
+    const vh = window.visualViewport
+      ? window.visualViewport.height * 0.01
+      : window.innerHeight * 0.01;
+    document.documentElement.style.setProperty("--vh", `${vh}px`);
+  };
+  fixVH();
+  window.visualViewport?.addEventListener("resize", fixVH);
+  window.addEventListener("resize", fixVH);
+
   // 현재 연도
   const yearEl = qs("#year");
   if (yearEl) yearEl.textContent = new Date().getFullYear();
@@ -20,7 +31,7 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 
   // 메뉴 클릭 → 섹션 이동
-  navLinks.forEach((a, i) => {
+  navLinks.forEach((a) => {
     a.addEventListener("click", (e) => {
       e.preventDefault();
       const target = qs(a.getAttribute("href"));
@@ -44,65 +55,30 @@ document.addEventListener("DOMContentLoaded", () => {
   }, { threshold: 0.6 });
   sections.forEach(s => io.observe(s));
 
-  // ✅ 데스크톱 전용 풀페이지 휠 (1281px 이상에서만 동작)
+  // ✅ 데스크톱 전용 풀페이지 휠
   let scrollTimer = null;
   let scrollDelta = 0;
-
   function sectionScrollHandler(e) {
-    if (window.innerWidth < 1281) return; // 모바일/태블릿은 자연 스크롤
+    if (window.innerWidth < 1281 || /Mobi|Android/i.test(navigator.userAgent)) return; // ✅ 모바일 자연 스크롤
     e.preventDefault();
     if (isScrolling) return;
     scrollDelta += e.deltaY;
     clearTimeout(scrollTimer);
-    scrollTimer = setTimeout(() => {
-      scrollDelta = 0;
-    }, 100);
+    scrollTimer = setTimeout(() => (scrollDelta = 0), 100);
 
     if (scrollDelta > 100) {
       isScrolling = true;
       currentIndex = Math.min(currentIndex + 1, sections.length - 1);
       sections[currentIndex].scrollIntoView({ behavior: "smooth" });
-      scrollDelta = 0;
       setTimeout(() => (isScrolling = false), 900);
     } else if (scrollDelta < -100) {
       isScrolling = true;
       currentIndex = Math.max(currentIndex - 1, 0);
       sections[currentIndex].scrollIntoView({ behavior: "smooth" });
-      scrollDelta = 0;
       setTimeout(() => (isScrolling = false), 900);
     }
   }
-
-  // ✅ 모바일에서는 wheel 이벤트 아예 제거
-  if (window.innerWidth >= 1281) {
-    window.addEventListener("wheel", sectionScrollHandler, { passive: false });
-  }
-
-  // ✅ 모바일/태블릿 터치 기반 섹션 이동 완전 비활성화
-  // (아래 기존 코드 블록 전체 주석처리)
-  /*
-  if (window.innerWidth > 1280) {
-    let startY = 0, endY = 0;
-    window.addEventListener(
-      "touchstart",
-      (e) => (startY = e.touches[0].clientY),
-      { passive: true }
-    );
-    window.addEventListener(
-      "touchend",
-      (e) => {
-        endY = e.changedTouches[0].clientY;
-        const diff = startY - endY;
-        if (Math.abs(diff) < 60) return;
-        if (diff > 0)
-          currentIndex = Math.min(currentIndex + 1, sections.length - 1);
-        else currentIndex = Math.max(currentIndex - 1, 0);
-        sections[currentIndex].scrollIntoView({ behavior: "smooth" });
-      },
-      { passive: true }
-    );
-  }
-  */
+  window.addEventListener("wheel", sectionScrollHandler, { passive: false });
 
   // ===== 시공 사례 캐러셀 =====
   const track = qs(".carousel-track");
@@ -213,10 +189,12 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // ===== 후기 자동 생성 =====
   const reviews = [
-    { stars: 5, quote: "욕실이 새집처럼 변했어요!", author: "김O수 고객" },
+    { stars: 5, quote: "욕실이 새집처럼 변했어요! 100% 만족입니다.", author: "김O수 고객" },
     { stars: 5, quote: "아이 키우는 집이라 위생 걱정이 사라졌어요!", author: "이O은 고객" },
     { stars: 5, quote: "시공도 깔끔하고 상담도 친절했습니다.", author: "박O수 고객" },
     { stars: 5, quote: "집이 훨씬 고급스러워졌어요.", author: "오O혁 고객" },
+    { stars: 5, quote: "시공 후 관리 방법까지 꼼꼼히 안내해주셔서 믿음이 갔어요.", author: "정O라 고객" },
+    { stars: 5, quote: "작업 후 곰팡이 냄새가 완전히 사라졌어요. 정말 만족합니다!", author: "최O민 고객" },
   ];
   const reviewContainer = qs("#reviews-container");
   if (reviewContainer) {
