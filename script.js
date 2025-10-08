@@ -10,33 +10,29 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // ==========================================================
   // 🌐 전 브라우저 대응형 vh 보정 (Safari, Chrome, Edge, Android 완전 대응)
-// ==========================================================
-// 🌐 전 브라우저 대응형 vh 보정 (Safari, Chrome, Edge, Android 완전 대응)
-// ==========================================================
-const fixVH = () => {
-  try {
-    const viewport = window.visualViewport || window;
-    const vh = viewport.height * 0.01;
-    document.documentElement.style.setProperty("--vh", `${vh}px`);
-  } catch (e) {
-    document.documentElement.style.setProperty("--vh", `${window.innerHeight * 0.01}px`);
-  }
-};
+  // ==========================================================
+  const fixVH = () => {
+    try {
+      const viewport = window.visualViewport || window;
+      const vh = viewport.height * 0.01;
+      document.documentElement.style.setProperty("--vh", `${vh}px`);
+    } catch (e) {
+      document.documentElement.style.setProperty("--vh", `${window.innerHeight * 0.01}px`);
+    }
+  };
 
-// ✅ 초기 실행
-fixVH();
-
-// ✅ 리사이즈 / 방향전환 시 재계산
-["resize", "orientationchange"].forEach(evt =>
-  window.addEventListener(evt, () => setTimeout(fixVH, 200))
-);
-
-// ✅ 페이지 로드 시 한 번 더, 그리고 주소창 애니메이션 완료 후 한 번 더 계산
-window.addEventListener("load", () => {
+  // 초기 1회 실행
   fixVH();
-  setTimeout(fixVH, 500); // ✅ iOS Safari 주소창 애니메이션 끝난 뒤 재보정
-});
 
+  // ✅ 리사이즈 / 방향전환 / 스크롤(주소창 표시 변화) 감지
+  ["resize", "orientationchange"].forEach(evt =>
+    window.addEventListener(evt, () => setTimeout(fixVH, 200))
+  );
+
+  window.addEventListener("load", () => {
+  fixVH();
+  setTimeout(fixVH, 500); // ✅ 주소창 애니메이션 완료 후 한 번 더 계산
+});
 
 
   if (window.visualViewport) {
@@ -229,17 +225,7 @@ window.addEventListener("load", () => {
   // ==========================================================
   // ☎️ 상담 버튼
   // ==========================================================
-  qsa(".contact-btn.kakao").forEach((btn) =>
-    btn.addEventListener("click", () =>
-      window.open("https://pf.kakao.com/_yourid", "_blank")
-    )
-  );
   qsa(".contact-btn.call").forEach(
     (btn) => (btn.onclick = () => (window.location.href = "tel:010-9593-7665"))
-  );
-  qsa(".contact-btn.blog").forEach((btn) =>
-    btn.addEventListener("click", () =>
-      window.open("https://blog.naver.com/yourblog", "_blank")
-    )
   );
 });
