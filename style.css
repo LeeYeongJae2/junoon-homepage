@@ -259,59 +259,165 @@ h2 { font-size: 2rem; margin-bottom: 18px; color: var(--primary); }
   overflow: hidden;
   padding: 100px 20px;
 }
-#gallery .inner { position: relative; z-index: 1; text-align: center; }
-#gallery .gallery-title { font-size: 2.2rem; font-weight: 800; color: #0041b8; margin-bottom: 16px; }
-#gallery .gallery-subtitle { color: #5b6f88; font-size: 1.05rem; margin-bottom: 50px; }
+
+#gallery .inner {
+  position: relative;
+  z-index: 1;
+  text-align: center;
+}
+
+#gallery .gallery-title {
+  font-size: 2.2rem;
+  font-weight: 800;
+  color: #0041b8;
+  margin-bottom: 16px;
+}
+
+#gallery .gallery-subtitle {
+  color: #5b6f88;
+  font-size: 1.05rem;
+  margin-bottom: 50px;
+}
+
+/* ✅ 캐러셀 컨테이너 */
 .carousel-container {
-  position: relative; overflow: hidden; width: 100%; max-width: 1300px;
-  margin: 0 auto; padding: 40px 0;
-  background: rgba(255, 255, 255, 0.85); border-radius: 26px;
+  position: relative;
+  overflow: hidden;
+  width: 100%;
+  max-width: 1300px;
+  margin: 0 auto;
+  padding: 40px 0;
+  background: rgba(255, 255, 255, 0.85);
+  border-radius: 26px;
   border: 1px solid rgba(190, 210, 255, 0.4);
   box-shadow: 0 12px 30px rgba(0, 50, 150, 0.08);
 }
-/* ✅ 시공사례 캐러셀 여백 개선 */
+
 .carousel-track {
   display: flex;
+  align-items: center;
+  gap: 28px;
   transition: transform 0.5s ease;
-  gap: 36px;
-  padding: 0 40px; /* ← 좌우 여백 추가 (중요) */
+  padding: 0 5vw;
   box-sizing: border-box;
 }
 
-/* ✅ 각 이미지 좌우 여백 */
 .carousel-item {
-  flex: 0 0 auto;
-  width: 100%;
+  flex: 0 0 90%;
   max-width: 600px;
-  margin: 0 10px; /* ← 이미지끼리 살짝 띄우기 */
   border-radius: 22px;
   overflow: hidden;
   position: relative;
-  background: #fefefe;
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+  background: #fff;
   border: 1px solid rgba(220, 230, 255, 0.4);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+  transition: all 0.5s ease;
+  transform: scale(0.9);
+  opacity: 0.5;
+  filter: blur(2px);
 }
-.carousel-item img { width: 100%; height: auto; max-height: 480px; object-fit: cover; pointer-events: none; user-select: none; -webkit-user-drag: none; }
-.carousel-btn { position: absolute; top: 50%; transform: translateY(-50%); background: linear-gradient(135deg, #007bff, #0040b3); border: none; color: #fff; padding: 14px 18px; cursor: pointer; border-radius: 50%; font-size: 20px; z-index: 5; box-shadow: 0 4px 14px rgba(0, 60, 200, 0.3); }
-.carousel-btn.prev { left: 20px; } .carousel-btn.next { right: 20px; }
-.carousel-indicator { text-align: center; margin-top: 24px; font-size: 15px; font-weight: 600; color: #0040b3; }
+
+/* ✅ 중앙 강조 효과 */
+.carousel-item.active {
+  transform: scale(1);
+  opacity: 1;
+  filter: blur(0);
+  z-index: 3;
+  box-shadow: 0 12px 36px rgba(0, 86, 179, 0.2);
+}
+
+
+
+/* ✅ 이미지 */
+.carousel-item img {
+  width: 100%;
+  height: auto;
+  max-height: 480px;
+  object-fit: cover;
+  pointer-events: none;
+  user-select: none;
+  -webkit-user-drag: none;
+  transition: all 0.4s ease;
+}
+
+/* ✅ 버튼 */
+.carousel-btn {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background: linear-gradient(135deg, #007bff, #0040b3);
+  border: none;
+  color: #fff;
+  width: 46px;
+  height: 46px;
+  cursor: pointer;
+  border-radius: 50%;
+  font-size: 20px;
+  z-index: 10;
+  box-shadow: 0 4px 14px rgba(0, 60, 200, 0.3);
+}
+.carousel-btn.prev { left: 20px; }
+.carousel-btn.next { right: 20px; }
+
+/* ✅ 인디케이터 */
+.carousel-indicator {
+  text-align: center;
+  margin-top: 24px;
+  font-size: 15px;
+  font-weight: 600;
+  color: #0040b3;
+}
 
 /* ---------------- 반응형 시공사례 ---------------- */
 @media (max-width: 1024px) {
   #gallery { padding: 80px 14px; }
-  #gallery .carousel-container { padding: 20px 10px; border-radius: 20px; }
-  #gallery .carousel-track { gap: 16px; }
-  #gallery .carousel-item { max-width: 100%; aspect-ratio: 4/3; border-radius: 16px; }
-  #gallery .carousel-item img { width: 100%; height: auto; max-height: 60vh; object-fit: contain; }
-  #gallery .carousel-btn { width: 40px; height: 40px; font-size: 18px; padding: 10px; }
-  #gallery .carousel-indicator { font-size: 0.9rem; margin-top: 16px; }
+
+  .carousel-track {
+    gap: 18px;
+    padding: 0 4vw;
+  }
+
+  .carousel-item {
+    flex: 0 0 95%;
+    border-radius: 18px;
+    transform: scale(0.95);
+  }
+
+  .carousel-item.active {
+    transform: scale(1);
+  }
+
+  .carousel-item img {
+    max-height: 60vh;
+    object-fit: contain;
+  }
+
+  .carousel-btn {
+    width: 40px;
+    height: 40px;
+    font-size: 18px;
+  }
+
+  .carousel-indicator {
+    font-size: 0.9rem;
+    margin-top: 16px;
+  }
 }
+
 @media (max-width: 480px) {
   #gallery { padding: 70px 12px; }
-  #gallery .gallery-title { font-size: 1.5rem; }
-  #gallery .gallery-subtitle { font-size: 0.9rem; margin-bottom: 30px; }
-  #gallery .carousel-item img { max-height: 50vh; }
+  .carousel-track { gap: 12px; padding: 0 3vw; }
+  .carousel-item {
+    flex: 0 0 100%;
+    border-radius: 14px;
+    transform: scale(0.97);
+  }
+  .carousel-item.active {
+    transform: scale(1);
+  }
+  .carousel-item img { max-height: 50vh; object-fit: contain; }
 }
+
 
 /* ---------------- 후기 섹션 ---------------- */
 #reviews {

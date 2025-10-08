@@ -30,10 +30,9 @@ document.addEventListener("DOMContentLoaded", () => {
   );
 
   window.addEventListener("load", () => {
-  fixVH();
-  setTimeout(fixVH, 500); // ✅ 주소창 애니메이션 완료 후 한 번 더 계산
-});
-
+    fixVH();
+    setTimeout(fixVH, 500); // ✅ 주소창 애니메이션 완료 후 한 번 더 계산
+  });
 
   if (window.visualViewport) {
     window.visualViewport.addEventListener("resize", () => setTimeout(fixVH, 200));
@@ -83,7 +82,7 @@ document.addEventListener("DOMContentLoaded", () => {
   sections.forEach(s => io.observe(s));
 
   // ==========================================================
-  // 🏠 시공 사례 캐러셀
+  // 🏠 시공 사례 캐러셀 (중앙 정렬 + 순환 + 스와이프)
   // ==========================================================
   const track = qs(".carousel-track");
   const items = qsa(".carousel-item");
@@ -94,35 +93,53 @@ document.addEventListener("DOMContentLoaded", () => {
 
   function updateCarousel() {
     if (!items.length) return;
-    const width = items[0].offsetWidth || 0;
+
+    const container = track.parentElement;
+    const containerWidth = container.offsetWidth;
+    const itemWidth = items[0].offsetWidth;
     const gap = parseFloat(getComputedStyle(track).gap) || 0;
-    track.style.transition = "transform .4s ease";
-    track.style.transform = `translateX(-${slideIndex * (width + gap)}px)`;
+    const trackPadding = parseFloat(getComputedStyle(track).paddingLeft) || 0;
+
+    // ✅ 중앙 정렬 정확도 보정 (패딩 포함)
+    const centerOffset = (containerWidth - itemWidth) / 2 - trackPadding / 2;
+    const baseTranslate = slideIndex * (itemWidth + gap);
+
+    // ✅ 트랜지션 이동
+    track.style.transition = "transform 0.6s ease";
+    track.style.transform = `translateX(${centerOffset - baseTranslate}px)`;
+
+    // ✅ 인디케이터 업데이트
     if (indicator) indicator.textContent = `${slideIndex + 1} / ${items.length}`;
+
+    // ✅ 활성 강조 클래스 처리
+    items.forEach((item, i) => {
+      item.classList.toggle("active", i === slideIndex);
+    });
   }
 
+  // ✅ 순환 이동 버튼
   prevBtn?.addEventListener("click", () => {
-    slideIndex = Math.max(0, slideIndex - 1);
+    slideIndex = (slideIndex - 1 + items.length) % items.length;
     updateCarousel();
   });
   nextBtn?.addEventListener("click", () => {
-    slideIndex = Math.min(items.length - 1, slideIndex + 1);
+    slideIndex = (slideIndex + 1) % items.length;
     updateCarousel();
   });
 
-  // 드래그 / 스와이프
-  let dragStartX = 0, isDragging = false;
+  // ✅ 드래그 / 스와이프
+  let startX = 0, isDragging = false;
   track?.addEventListener("mousedown", (e) => {
     isDragging = true;
-    dragStartX = e.clientX;
+    startX = e.clientX;
     track.style.transition = "none";
   });
   window.addEventListener("mouseup", () => (isDragging = false));
   window.addEventListener("mousemove", (e) => {
     if (!isDragging) return;
-    const diff = e.clientX - dragStartX;
-    if (Math.abs(diff) > 80) {
-      if (diff < 0) nextBtn?.click();
+    const dx = e.clientX - startX;
+    if (Math.abs(dx) > 80) {
+      if (dx < 0) nextBtn?.click();
       else prevBtn?.click();
       isDragging = false;
     }
@@ -131,9 +148,9 @@ document.addEventListener("DOMContentLoaded", () => {
   let touchStartX = 0;
   track?.addEventListener("touchstart", (e) => (touchStartX = e.touches[0].clientX), { passive: true });
   track?.addEventListener("touchend", (e) => {
-    const diff = touchStartX - e.changedTouches[0].clientX;
-    if (Math.abs(diff) > 60) {
-      if (diff > 0) nextBtn?.click();
+    const dx = touchStartX - e.changedTouches[0].clientX;
+    if (Math.abs(dx) > 60) {
+      if (dx > 0) nextBtn?.click();
       else prevBtn?.click();
     }
   }, { passive: true });
@@ -142,7 +159,7 @@ document.addEventListener("DOMContentLoaded", () => {
   window.addEventListener("resize", updateCarousel);
 
   // ==========================================================
-  // 🔄 비교 섹션 캐러셀
+  // 🔄 비교 섹션 캐러셀 (기존 유지)
   // ==========================================================
   const cmpTrack = qs(".comparison-track");
   const cmpSlides = qsa(".comparison-slide");
@@ -194,6 +211,7 @@ document.addEventListener("DOMContentLoaded", () => {
       updateComparison();
     }
   }, { passive: true });
+
   updateComparison();
   window.addEventListener("resize", updateComparison);
 
