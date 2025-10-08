@@ -752,6 +752,53 @@ h2 { font-size: 2rem; margin-bottom: 18px; color: var(--primary); }
   #contact .call-text { display: flex; }
 }
 
+/* ====== [2025-10-08 안정화 패치] 이미지 & 모바일 높이 개선 ====== */
+
+/* 1️⃣ 섹션 높이 보정 — 모바일에서 내용 가려지는 문제 해결 */
+@media (max-width: 768px) {
+  .section {
+    min-height: calc(100vh - var(--navH) + 120px); /* ✅ 높이 여유 확보 */
+  }
+}
+
+/* 2️⃣ 이미지 섹션 비율 안정화 (비교 / 갤러리 / 왜 이선생활줄눈) */
+
+/* 비교 섹션 */
+#comparison .comparison-item {
+  aspect-ratio: 4 / 3;
+  overflow: hidden;
+}
+#comparison .comparison-item img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* 시공 사례 */
+#gallery .carousel-item {
+  aspect-ratio: 4 / 3;
+  overflow: hidden;
+}
+#gallery .carousel-item img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* 왜 이선생활줄눈 단일 이미지 */
+#why-us .why-image-single img {
+  width: 100%;
+  height: auto;
+  max-width: 550px;
+  object-fit: contain;
+}
+
+/* 3️⃣ 스크롤 위치 보정 — 헤더에 섹션 제목 가려짐 방지 */
+.section {
+  scroll-margin-top: var(--navH);
+}
+
+
 
 
 

@@ -44,42 +44,45 @@ document.addEventListener("DOMContentLoaded", () => {
   }, { threshold: 0.6 });
   sections.forEach(s => io.observe(s));
 
-  // ✅ 데스크톱 전용 풀페이지 휠 (1281px 이상일 때만)
+  // ✅ 데스크톱 전용 풀페이지 휠 (1281px 이상에서만 동작)
   let scrollTimer = null;
   let scrollDelta = 0;
-  window.addEventListener(
-    "wheel",
-    (e) => {
-      if (window.innerWidth < 1281) return; // ✅ 태블릿/모바일은 자연 스크롤
-      e.preventDefault();
-      if (isScrolling) return;
-      scrollDelta += e.deltaY;
-      clearTimeout(scrollTimer);
-      scrollTimer = setTimeout(() => {
-        scrollDelta = 0;
-      }, 100);
 
-      if (scrollDelta > 100) {
-        isScrolling = true;
-        currentIndex = Math.min(currentIndex + 1, sections.length - 1);
-        sections[currentIndex].scrollIntoView({ behavior: "smooth" });
-        scrollDelta = 0;
-        setTimeout(() => (isScrolling = false), 900);
-      } else if (scrollDelta < -100) {
-        isScrolling = true;
-        currentIndex = Math.max(currentIndex - 1, 0);
-        sections[currentIndex].scrollIntoView({ behavior: "smooth" });
-        scrollDelta = 0;
-        setTimeout(() => (isScrolling = false), 900);
-      }
-    },
-    { passive: false }
-  );
+  function sectionScrollHandler(e) {
+    if (window.innerWidth < 1281) return; // 모바일/태블릿은 자연 스크롤
+    e.preventDefault();
+    if (isScrolling) return;
+    scrollDelta += e.deltaY;
+    clearTimeout(scrollTimer);
+    scrollTimer = setTimeout(() => {
+      scrollDelta = 0;
+    }, 100);
 
-  // ✅ 모바일/태블릿 스와이프 스크롤 비활성화 (자연 스크롤 유지)
+    if (scrollDelta > 100) {
+      isScrolling = true;
+      currentIndex = Math.min(currentIndex + 1, sections.length - 1);
+      sections[currentIndex].scrollIntoView({ behavior: "smooth" });
+      scrollDelta = 0;
+      setTimeout(() => (isScrolling = false), 900);
+    } else if (scrollDelta < -100) {
+      isScrolling = true;
+      currentIndex = Math.max(currentIndex - 1, 0);
+      sections[currentIndex].scrollIntoView({ behavior: "smooth" });
+      scrollDelta = 0;
+      setTimeout(() => (isScrolling = false), 900);
+    }
+  }
+
+  // ✅ 모바일에서는 wheel 이벤트 아예 제거
+  if (window.innerWidth >= 1281) {
+    window.addEventListener("wheel", sectionScrollHandler, { passive: false });
+  }
+
+  // ✅ 모바일/태블릿 터치 기반 섹션 이동 완전 비활성화
+  // (아래 기존 코드 블록 전체 주석처리)
+  /*
   if (window.innerWidth > 1280) {
-    let startY = 0,
-      endY = 0;
+    let startY = 0, endY = 0;
     window.addEventListener(
       "touchstart",
       (e) => (startY = e.touches[0].clientY),
@@ -99,6 +102,7 @@ document.addEventListener("DOMContentLoaded", () => {
       { passive: true }
     );
   }
+  */
 
   // ===== 시공 사례 캐러셀 =====
   const track = qs(".carousel-track");
@@ -125,20 +129,14 @@ document.addEventListener("DOMContentLoaded", () => {
     updateCarousel();
   });
 
-  // ❌ 자동전환 제거
-  // setInterval(() => { slideIndex = (slideIndex + 1) % items.length; updateCarousel(); }, 4000);
-
-  // 드래그/스와이프(트랙에서만)
-  let dragStartX = 0,
-    isDragging = false;
+  // 드래그/스와이프
+  let dragStartX = 0, isDragging = false;
   track?.addEventListener("mousedown", (e) => {
     isDragging = true;
     dragStartX = e.clientX;
     track.style.transition = "none";
   });
-  window.addEventListener("mouseup", () => {
-    isDragging = false;
-  });
+  window.addEventListener("mouseup", () => (isDragging = false));
   window.addEventListener("mousemove", (e) => {
     if (!isDragging) return;
     const diff = e.clientX - dragStartX;
@@ -149,24 +147,14 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   });
   let touchStartX = 0;
-  track?.addEventListener(
-    "touchstart",
-    (e) => {
-      touchStartX = e.touches[0].clientX;
-    },
-    { passive: true }
-  );
-  track?.addEventListener(
-    "touchend",
-    (e) => {
-      const diff = touchStartX - e.changedTouches[0].clientX;
-      if (Math.abs(diff) > 60) {
-        if (diff > 0) nextBtn?.click();
-        else prevBtn?.click();
-      }
-    },
-    { passive: true }
-  );
+  track?.addEventListener("touchstart", (e) => (touchStartX = e.touches[0].clientX), { passive: true });
+  track?.addEventListener("touchend", (e) => {
+    const diff = touchStartX - e.changedTouches[0].clientX;
+    if (Math.abs(diff) > 60) {
+      if (diff > 0) nextBtn?.click();
+      else prevBtn?.click();
+    }
+  }, { passive: true });
   updateCarousel();
   window.addEventListener("resize", updateCarousel);
 
@@ -195,17 +183,14 @@ document.addEventListener("DOMContentLoaded", () => {
     updateComparison();
   });
 
-  // 드래그/스와이프(트랙에서만)
-  let cmpStartX = 0,
-    cmpDragging = false;
+  // 드래그/스와이프
+  let cmpStartX = 0, cmpDragging = false;
   cmpTrack?.addEventListener("mousedown", (e) => {
     cmpDragging = true;
     cmpStartX = e.clientX;
     cmpTrack.style.transition = "none";
   });
-  window.addEventListener("mouseup", () => {
-    cmpDragging = false;
-  });
+  window.addEventListener("mouseup", () => (cmpDragging = false));
   window.addEventListener("mousemove", (e) => {
     if (!cmpDragging) return;
     const dx = e.clientX - cmpStartX;
@@ -215,24 +200,14 @@ document.addEventListener("DOMContentLoaded", () => {
       updateComparison();
     }
   });
-  cmpTrack?.addEventListener(
-    "touchstart",
-    (e) => {
-      cmpStartX = e.touches[0].clientX;
-    },
-    { passive: true }
-  );
-  cmpTrack?.addEventListener(
-    "touchend",
-    (e) => {
-      const dx = cmpStartX - e.changedTouches[0].clientX;
-      if (Math.abs(dx) > 50) {
-        cmpIndex = (cmpIndex + (dx > 0 ? 1 : -1) + cmpSlides.length) % cmpSlides.length;
-        updateComparison();
-      }
-    },
-    { passive: true }
-  );
+  cmpTrack?.addEventListener("touchstart", (e) => (cmpStartX = e.touches[0].clientX), { passive: true });
+  cmpTrack?.addEventListener("touchend", (e) => {
+    const dx = cmpStartX - e.changedTouches[0].clientX;
+    if (Math.abs(dx) > 50) {
+      cmpIndex = (cmpIndex + (dx > 0 ? 1 : -1) + cmpSlides.length) % cmpSlides.length;
+      updateComparison();
+    }
+  }, { passive: true });
   updateComparison();
   window.addEventListener("resize", updateComparison);
 
@@ -252,24 +227,23 @@ document.addEventListener("DOMContentLoaded", () => {
         <div class="stars">${"⭐".repeat(r.stars)}</div>
         <p class="quote">"${r.quote}"</p>
         <p class="author">- ${r.author}</p>
-      </div>
-    `
+      </div>`
       )
       .join("");
   }
 
   // ===== 상담 버튼 =====
-  qsa(".contact-btn.kakao").forEach((btn) => {
+  qsa(".contact-btn.kakao").forEach((btn) =>
     btn.addEventListener("click", () =>
       window.open("https://pf.kakao.com/_yourid", "_blank")
-    );
-  });
+    )
+  );
   qsa(".contact-btn.call").forEach(
     (btn) => (btn.onclick = () => (window.location.href = "tel:010-9593-7665"))
   );
-  qsa(".contact-btn.blog").forEach((btn) => {
+  qsa(".contact-btn.blog").forEach((btn) =>
     btn.addEventListener("click", () =>
       window.open("https://blog.naver.com/yourblog", "_blank")
-    );
-  });
+    )
+  );
 });
