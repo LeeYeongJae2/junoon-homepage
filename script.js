@@ -87,17 +87,20 @@ document.addEventListener("DOMContentLoaded", () => {
   if (!items.length) return;
 
   const container = track.parentElement;
-  const containerWidth = container.offsetWidth;
-  const itemWidth = items[0].offsetWidth;
-  const gap = parseFloat(getComputedStyle(track).gap) || 0;
+  const active = items[slideIndex];
 
-  // ✅ 중앙 정렬 계산 (패딩 보정 제거, 실제 픽셀 기준)
-  const centerOffset = (containerWidth - itemWidth) / 2;
-  const baseTranslate = slideIndex * (itemWidth + gap);
+  // ✅ 활성 아이템의 실제 중심 좌표
+  const itemCenter = active.offsetLeft + active.offsetWidth / 2;
+
+  // ✅ 컨테이너의 중심
+  const containerCenter = container.clientWidth / 2;
+
+  // ✅ 차이만큼 트랙을 이동시켜 완벽 중앙 정렬
+  const translateX = containerCenter - itemCenter;
 
   // ✅ 부드러운 이동
   track.style.transition = "transform 0.6s ease";
-  track.style.transform = `translateX(${centerOffset - baseTranslate}px)`;
+  track.style.transform = `translateX(${translateX}px)`;
 
   // ✅ 인디케이터 업데이트
   if (indicator) indicator.textContent = `${slideIndex + 1} / ${items.length}`;
@@ -113,6 +116,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   });
 }
+
 
 
   // ✅ 순환 이동 버튼
@@ -244,4 +248,8 @@ document.addEventListener("DOMContentLoaded", () => {
   qsa(".contact-btn.call").forEach(
     (btn) => (btn.onclick = () => (window.location.href = "tel:010-9593-7665"))
   );
+
+
+  window.addEventListener("load", updateCarousel);
+
 });
