@@ -235,6 +235,7 @@ document.addEventListener("DOMContentLoaded", () => {
   // ==========================================================
   const kakaoBtn = qs("#kakaoLink");
   if (kakaoBtn) {
+    // ✅ 올바른 카카오 오픈채팅 주소로 교체
     const kakaoOpenLink = "https://open.kakao.com/o/sJYjxMVh";
     kakaoBtn.addEventListener("click", (e) => {
       e.preventDefault();
