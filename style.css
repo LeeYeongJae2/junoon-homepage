@@ -80,6 +80,7 @@ header.navbar {
   background: var(--primary);
 }
 
+/* ✅ 메뉴가 열릴 때 배경 어둡게 */
 .nav-overlay {
   position: fixed;
   top: 0; left: 0;
@@ -97,6 +98,11 @@ header.navbar {
   pointer-events: all;
 }
 
+/* ✅ body 스크롤 방지 (메뉴 열릴 때) */
+body.nav-open {
+  overflow: hidden !important;
+  height: 100vh !important;
+}
 
 /* ---------------- 모바일 반응형 ---------------- */
 @media (max-width: 900px) {
@@ -118,6 +124,7 @@ header.navbar {
     top: calc(var(--navH) + 8px);
     left: 4%;
     right: 4%;
+    bottom: 4%; /* 👈 화면 하단 여백 확보 */
     background: #ffffff;
     border-radius: 14px;
     box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
@@ -127,12 +134,12 @@ header.navbar {
     flex-direction: column;
     align-items: stretch;
 
-    max-height: calc(100vh - 100px);
+    /* ✅ 전체 높이 정확히 계산 (모바일 브라우저 대응) */
+    max-height: calc(var(--vh, 1vh) * 100 - var(--navH) - 20px);
     overflow-y: auto;
     -webkit-overflow-scrolling: touch;
     animation: fadeSlide 0.25s ease;
   }
-
 
   /* ✅ 메뉴 아이템 스타일 */
   .nav-links.show a {
@@ -153,6 +160,7 @@ header.navbar {
     to { opacity: 1; transform: translateY(0); }
   }
 }
+
 
 /* ---------------- 섹션 기본 ---------------- */
 .section {

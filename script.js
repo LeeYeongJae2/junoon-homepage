@@ -50,6 +50,9 @@ document.addEventListener("DOMContentLoaded", () => {
   menuToggle?.addEventListener("click", () => {
     const isOpen = navList.classList.toggle("show");
     navOverlay.classList.toggle("show", isOpen);
+
+    // ✅ 메뉴 열릴 때 body 스크롤 잠금
+    document.body.classList.toggle("nav-open", isOpen);
   });
 
   // ✅ 메뉴 클릭 시 자동 닫힘
@@ -62,13 +65,15 @@ document.addEventListener("DOMContentLoaded", () => {
       a.classList.add("active");
       navList.classList.remove("show");
       navOverlay.classList.remove("show");
+      document.body.classList.remove("nav-open");
     });
   });
 
-  // ✅ 외부 클릭 시 닫기
+  // ✅ 외부 영역 클릭 시 닫기
   navOverlay.addEventListener("click", () => {
     navList.classList.remove("show");
     navOverlay.classList.remove("show");
+    document.body.classList.remove("nav-open");
   });
 
   // ==========================================================
