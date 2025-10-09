@@ -84,42 +84,26 @@ document.addEventListener("DOMContentLoaded", () => {
   let slideIndex = 0;
 
   function updateCarousel() {
-  if (!items.length) return;
+    if (!items.length) return;
+    const container = track.parentElement;
+    const active = items[slideIndex];
+    const itemCenter = active.offsetLeft + active.offsetWidth / 2;
+    const containerCenter = container.clientWidth / 2;
+    const translateX = containerCenter - itemCenter;
+    track.style.transition = "transform 0.6s ease";
+    track.style.transform = `translateX(${translateX}px)`;
+    if (indicator) indicator.textContent = `${slideIndex + 1} / ${items.length}`;
+    items.forEach((item, i) => {
+      if (i === slideIndex) {
+        item.classList.add("active");
+        item.style.zIndex = "3";
+      } else {
+        item.classList.remove("active");
+        item.style.zIndex = "1";
+      }
+    });
+  }
 
-  const container = track.parentElement;
-  const active = items[slideIndex];
-
-  // ✅ 활성 아이템의 실제 중심 좌표
-  const itemCenter = active.offsetLeft + active.offsetWidth / 2;
-
-  // ✅ 컨테이너의 중심
-  const containerCenter = container.clientWidth / 2;
-
-  // ✅ 차이만큼 트랙을 이동시켜 완벽 중앙 정렬
-  const translateX = containerCenter - itemCenter;
-
-  // ✅ 부드러운 이동
-  track.style.transition = "transform 0.6s ease";
-  track.style.transform = `translateX(${translateX}px)`;
-
-  // ✅ 인디케이터 업데이트
-  if (indicator) indicator.textContent = `${slideIndex + 1} / ${items.length}`;
-
-  // ✅ 강조 효과 적용
-  items.forEach((item, i) => {
-    if (i === slideIndex) {
-      item.classList.add("active");
-      item.style.zIndex = "3";
-    } else {
-      item.classList.remove("active");
-      item.style.zIndex = "1";
-    }
-  });
-}
-
-
-
-  // ✅ 순환 이동 버튼
   prevBtn?.addEventListener("click", () => {
     slideIndex = (slideIndex - 1 + items.length) % items.length;
     updateCarousel();
@@ -146,7 +130,6 @@ document.addEventListener("DOMContentLoaded", () => {
       isDragging = false;
     }
   });
-
   let touchStartX = 0;
   track?.addEventListener("touchstart", (e) => (touchStartX = e.touches[0].clientX), { passive: true });
   track?.addEventListener("touchend", (e) => {
@@ -228,29 +211,61 @@ document.addEventListener("DOMContentLoaded", () => {
     { stars: 5, quote: "집을 오래 쓰다 보면 타일 사이사이에 생기는 얼룩이나 곰팡이 때문에 신경 쓰이는데, 줄눈을 새로 하고나니깐 집안 전체 분위기가 한층 깔끔해졌어요. 무엇보다 줄눈 작업 후에는 곰팡이나 얼룩이 덜 생기고, 오래도록 깔끔함이 유지되는게 정말 마음에 들었습니다. 시공 후에는 공간이 훨씬 환해지고 관리도 쉬워져서 줄눈 효과를 제대로 느낄 수 있답니다.", author: "최O민 고객",meta: "🏠 구미 인동동" },
     { stars: 5, quote: "제가 줄눈시공을 결정할때 중요하게 봤던점은 꼼꼼하게 해주는 곳인지 또 시간이 지나도 변색없이 유지가잘 되는 곳인지를 잘 따져보고 결정했어요! 제가 알아본바로는 이선생줄눈이 전체적인 평이 가장 부합하고 좋더라구요! 그리고 당일에 시공하실때 잠깐 외출하고 집에 들어갔는데 정말 깜짝 놀랐어요.. 내집이 맞나 싶더라구요.. 줄눈 하나로 집이 이렇게나 달라져서 놀랐어요.. 완성된 줄눈은 깔끔하고 세련된 분위기를 주었고, 역시 전문가의 손길을 거치니까 다르더라구요.. 처음 상담할때부터해서 마무리 까지 만족도 높은 관리를 해주셔서 주변에도 아는 지인들에게도 많이 알려줬어요!!", author: "정O라 고객",meta: "🏠 포항 북구" },
   ];
+
   const reviewContainer = qs("#reviews-container");
   if (reviewContainer) {
-    reviewContainer.innerHTML = reviews
-      .map(
-        (r) => `
+    reviewContainer.innerHTML = reviews.map(r => `
       <div class="review-card">
         <div class="stars">${"⭐".repeat(r.stars)}</div>
         <p class="quote">"${r.quote}"</p>
         <p class="meta">${r.meta}</p>
         <p class="author">- ${r.author}</p>      
-      </div>`
-      )
-      .join("");
+      </div>`).join("");
   }
 
   // ==========================================================
-  // ☎️ 상담 버튼
+  // ☎️ 상담 버튼 - 전화
   // ==========================================================
-  qsa(".contact-btn.call").forEach(
-    (btn) => (btn.onclick = () => (window.location.href = "tel:010-9593-7665"))
+  qsa(".contact-btn.call").forEach(btn =>
+    (btn.onclick = () => (window.location.href = "tel:010-9593-7665"))
   );
 
+  // ==========================================================
+  // 💬 카카오톡 상담 버튼 (브랜딩형 팝업)
+  // ==========================================================
+  const kakaoBtn = qs("#kakaoLink");
+  if (kakaoBtn) {
+    const kakaoOpenLink = "https://open.kakao.com/o/sJYjxMVh";
+    kakaoBtn.addEventListener("click", (e) => {
+      e.preventDefault();
+      const ua = navigator.userAgent.toLowerCase();
+      if (/iphone|ipad|ipod|android/.test(ua)) {
+        window.location.href = kakaoOpenLink;
+        return;
+      }
+      const popup = document.createElement("div");
+      popup.classList.add("kakao-popup-overlay");
+      popup.innerHTML = `
+        <div class="kakao-popup">
+          <div class="kakao-header">
+            <img src="https://cdn-icons-png.flaticon.com/512/2111/2111468.png" alt="카카오톡 아이콘" class="kakao-icon">
+            <h3>이선생줄눈 상담톡</h3>
+          </div>
+          <div class="kakao-body">
+            <p>💬 카카오톡으로 편하게 문의해보세요!<br>
+            📱 아래 QR코드를 휴대폰으로 스캔해주세요.</p>
+            <div class="qr-box">
+              <img src="https://api.qrserver.com/v1/create-qr-code/?data=${encodeURIComponent(kakaoOpenLink)}&size=180x180" alt="카카오톡 QR코드" class="qr-img">
+            </div>
+            <a href="${kakaoOpenLink}" target="_blank" class="kakao-popup-btn">💛 카카오톡 열기</a>
+          </div>
+          <button class="kakao-popup-close">✖ 닫기</button>
+        </div>
+      `;
+      document.body.appendChild(popup);
+      popup.querySelector(".kakao-popup-close").addEventListener("click", () => popup.remove());
+    });
+  }
 
   window.addEventListener("load", updateCarousel);
-
 });
