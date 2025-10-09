@@ -41,13 +41,18 @@ document.addEventListener("DOMContentLoaded", () => {
   if (yearEl) yearEl.textContent = new Date().getFullYear();
 
   // ==========================================================
-  // 📱 모바일 메뉴 토글
+  // 📱 모바일 메뉴 토글 + 백드롭 (배경 어둡게 & 외부 클릭 시 닫힘)
   // ==========================================================
+  let navOverlay = document.createElement("div");
+  navOverlay.classList.add("nav-overlay");
+  document.body.appendChild(navOverlay);
+
   menuToggle?.addEventListener("click", () => {
-    navList.classList.toggle("show");
+    const isOpen = navList.classList.toggle("show");
+    navOverlay.classList.toggle("show", isOpen);
   });
 
-  // 메뉴 클릭 시 섹션 이동 + active 표시
+  // ✅ 메뉴 클릭 시 자동 닫힘
   navLinks.forEach((a) => {
     a.addEventListener("click", (e) => {
       e.preventDefault();
@@ -56,7 +61,14 @@ document.addEventListener("DOMContentLoaded", () => {
       navLinks.forEach(n => n.classList.remove("active"));
       a.classList.add("active");
       navList.classList.remove("show");
+      navOverlay.classList.remove("show");
     });
+  });
+
+  // ✅ 외부 클릭 시 닫기
+  navOverlay.addEventListener("click", () => {
+    navList.classList.remove("show");
+    navOverlay.classList.remove("show");
   });
 
   // ==========================================================
@@ -144,7 +156,7 @@ document.addEventListener("DOMContentLoaded", () => {
   window.addEventListener("resize", updateCarousel);
 
   // ==========================================================
-  // 🔄 비교 섹션 캐러셀 (기존 유지)
+  // 🔄 비교 섹션 캐러셀
   // ==========================================================
   const cmpTrack = qs(".comparison-track");
   const cmpSlides = qsa(".comparison-slide");
@@ -212,6 +224,7 @@ document.addEventListener("DOMContentLoaded", () => {
     { stars: 5, quote: "제가 줄눈시공을 결정할때 중요하게 봤던점은 꼼꼼하게 해주는 곳인지 또 시간이 지나도 변색없이 유지가잘 되는 곳인지를 잘 따져보고 결정했어요! 제가 알아본바로는 이선생줄눈이 전체적인 평이 가장 부합하고 좋더라구요! 그리고 당일에 시공하실때 잠깐 외출하고 집에 들어갔는데 정말 깜짝 놀랐어요.. 내집이 맞나 싶더라구요.. 줄눈 하나로 집이 이렇게나 달라져서 놀랐어요.. 완성된 줄눈은 깔끔하고 세련된 분위기를 주었고, 역시 전문가의 손길을 거치니까 다르더라구요.. 처음 상담할때부터해서 마무리 까지 만족도 높은 관리를 해주셔서 주변에도 아는 지인들에게도 많이 알려줬어요!!", author: "정O라 고객",meta: "🏠 포항 북구" },
   ];
 
+
   const reviewContainer = qs("#reviews-container");
   if (reviewContainer) {
     reviewContainer.innerHTML = reviews.map(r => `
@@ -224,26 +237,34 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   // ==========================================================
-  // ☎️ 상담 버튼 - 전화
+  // ☎️ 상담 버튼
   // ==========================================================
   qsa(".contact-btn.call").forEach(btn =>
     (btn.onclick = () => (window.location.href = "tel:010-9593-7665"))
   );
 
   // ==========================================================
-  // 💬 카카오톡 상담 버튼 (브랜딩형 팝업)
+  // 💬 카카오톡 상담 버튼 (앱 자동 실행 + PC QR)
   // ==========================================================
   const kakaoBtn = qs("#kakaoLink");
   if (kakaoBtn) {
-    // ✅ 올바른 카카오 오픈채팅 주소로 교체
     const kakaoOpenLink = "https://open.kakao.com/o/sJYjxMVh";
+
     kakaoBtn.addEventListener("click", (e) => {
       e.preventDefault();
       const ua = navigator.userAgent.toLowerCase();
-      if (/iphone|ipad|ipod|android/.test(ua)) {
+
+      if (/android/.test(ua)) {
+        window.location.href =
+          "intent://open.kakao.com/o/sJYjxMVh#Intent;scheme=https;package=com.kakao.talk;end";
+        return;
+      }
+
+      if (/iphone|ipad|ipod/.test(ua)) {
         window.location.href = kakaoOpenLink;
         return;
       }
+
       const popup = document.createElement("div");
       popup.classList.add("kakao-popup-overlay");
       popup.innerHTML = `
