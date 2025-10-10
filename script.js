@@ -278,6 +278,8 @@ window.addEventListener("scroll", () => {
         return;
       }
 
+      
+
       const popup = document.createElement("div");
       popup.classList.add("kakao-popup-overlay");
       popup.innerHTML = `
