@@ -9,7 +9,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const navList    = qs(".nav-links");
 
   // ==========================================================
-  // 🌐 전 브라우저 대응형 vh 보정 (Safari, Chrome, Edge, Android 완전 대응)
+  // 🌐 전 브라우저 대응형 vh 보정
   // ==========================================================
   const fixVH = () => {
     try {
@@ -41,7 +41,7 @@ document.addEventListener("DOMContentLoaded", () => {
   if (yearEl) yearEl.textContent = new Date().getFullYear();
 
   // ==========================================================
-  // 📱 모바일 메뉴 토글 + 백드롭 (배경 어둡게 & 외부 클릭 시 닫힘)
+  // 📱 모바일 메뉴 토글 + 백드롭
   // ==========================================================
   let navOverlay = document.createElement("div");
   navOverlay.classList.add("nav-overlay");
@@ -50,8 +50,6 @@ document.addEventListener("DOMContentLoaded", () => {
   menuToggle?.addEventListener("click", () => {
     const isOpen = navList.classList.toggle("show");
     navOverlay.classList.toggle("show", isOpen);
-
-    // ✅ 메뉴 열릴 때 body 스크롤 잠금
     document.body.classList.toggle("nav-open", isOpen);
   });
 
@@ -76,22 +74,33 @@ document.addEventListener("DOMContentLoaded", () => {
     document.body.classList.remove("nav-open");
   });
 
-  // ==========================================================
-  // 🔍 IntersectionObserver로 현재 섹션 감지 (네비 연동)
-  // ==========================================================
-  const io = new IntersectionObserver((entries) => {
-    const visible = entries.find(e => e.isIntersecting);
-    if (!visible) return;
-    const idx = sections.indexOf(visible.target);
-    if (idx >= 0) {
-      navLinks.forEach(n => n.classList.remove("active"));
-      if (navLinks[idx]) navLinks[idx].classList.add("active");
+// ==========================================================
+// 🔍 섹션 감지 (scrollY 기반 정확도형)
+// ==========================================================
+window.addEventListener("scroll", () => {
+  const scrollY = window.pageYOffset || document.documentElement.scrollTop;
+  const headerHeight = document.querySelector("header.navbar")?.offsetHeight || 80;
+  const offset = scrollY + headerHeight + 100; // 헤더보다 약간 아래 기준점
+
+  let currentId = "";
+  document.querySelectorAll("section[id]").forEach(section => {
+    const top = section.offsetTop;
+    const height = section.offsetHeight;
+    if (offset >= top && offset < top + height) {
+      currentId = section.id;
     }
-  }, { threshold: 0.6 });
-  sections.forEach(s => io.observe(s));
+  });
+
+  if (currentId) {
+    document.querySelectorAll(".nav-links a").forEach(a => {
+      a.classList.toggle("active", a.getAttribute("href").includes(currentId));
+    });
+  }
+});
+
 
   // ==========================================================
-  // 🏠 시공 사례 캐러셀 (중앙 정렬 + 순환 + 스와이프)
+  // 🏠 시공 사례 캐러셀
   // ==========================================================
   const track = qs(".carousel-track");
   const items = qsa(".carousel-item");
@@ -229,7 +238,6 @@ document.addEventListener("DOMContentLoaded", () => {
     { stars: 5, quote: "제가 줄눈시공을 결정할때 중요하게 봤던점은 꼼꼼하게 해주는 곳인지 또 시간이 지나도 변색없이 유지가잘 되는 곳인지를 잘 따져보고 결정했어요! 제가 알아본바로는 이선생줄눈이 전체적인 평이 가장 부합하고 좋더라구요! 그리고 당일에 시공하실때 잠깐 외출하고 집에 들어갔는데 정말 깜짝 놀랐어요.. 내집이 맞나 싶더라구요.. 줄눈 하나로 집이 이렇게나 달라져서 놀랐어요.. 완성된 줄눈은 깔끔하고 세련된 분위기를 주었고, 역시 전문가의 손길을 거치니까 다르더라구요.. 처음 상담할때부터해서 마무리 까지 만족도 높은 관리를 해주셔서 주변에도 아는 지인들에게도 많이 알려줬어요!!", author: "정O라 고객",meta: "🏠 포항 북구" },
   ];
 
-
   const reviewContainer = qs("#reviews-container");
   if (reviewContainer) {
     reviewContainer.innerHTML = reviews.map(r => `
@@ -249,7 +257,7 @@ document.addEventListener("DOMContentLoaded", () => {
   );
 
   // ==========================================================
-  // 💬 카카오톡 상담 버튼 (앱 자동 실행 + PC QR)
+  // 💬 카카오톡 상담 버튼
   // ==========================================================
   const kakaoBtn = qs("#kakaoLink");
   if (kakaoBtn) {
@@ -295,4 +303,19 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   window.addEventListener("load", updateCarousel);
+});
+
+// ✅ 이미지 자동 슬라이드 전환
+document.addEventListener("DOMContentLoaded", () => {
+  const frames = document.querySelectorAll(".img-frame img");
+  const dots = document.querySelectorAll(".gallery-dots .dot");
+  let idx = 0;
+
+  setInterval(() => {
+    frames[idx].classList.remove("active");
+    dots[idx].classList.remove("active");
+    idx = (idx + 1) % frames.length;
+    frames[idx].classList.add("active");
+    dots[idx].classList.add("active");
+  }, 3500);
 });
