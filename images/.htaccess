@@ -1,0 +1,16 @@
+# ✅ 보안 헤더 설정 (이선생줄눈)
+<IfModule mod_headers.c>
+  Header always set Strict-Transport-Security "max-age=31536000; includeSubDomains; preload"
+  Header always set Content-Security-Policy "default-src 'self' https: data:; script-src 'self' https://wcs.naver.net https://cdnjs.cloudflare.com; style-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com; img-src 'self' https://www.iseonsaengjulnun.com data: https:; connect-src 'self'; font-src 'self' https://cdnjs.cloudflare.com; frame-ancestors 'none';"
+  Header always set X-Content-Type-Options "nosniff"
+  Header always set X-Frame-Options "DENY"
+  Header always set Referrer-Policy "strict-origin-when-cross-origin"
+  Header always set Permissions-Policy "geolocation=(), microphone=(), camera=(), payment=()"
+  Header always set X-XSS-Protection "1; mode=block"
+  Header always set Cache-Control "public, max-age=86400"
+</IfModule>
+
+# ✅ HTTPS 강제 리다이렉트
+RewriteEngine On
+RewriteCond %{HTTPS} !=on
+RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]

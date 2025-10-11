@@ -1,0 +1,27 @@
+# robots.txt for iseonsaengjulnun.com
+# ✅ 보안 및 SEO 통합관리 설정
+
+User-agent: *
+Disallow: /admin/
+Disallow: /config/
+Disallow: /tmp/
+Disallow: /cgi-bin/
+Disallow: /private/
+Disallow: /backup/
+Disallow: /test/
+Disallow: /old/
+Disallow: /temp/
+Disallow: /uploads/
+Disallow: /*.php$
+Disallow: /*.cgi$
+Disallow: /*.json$
+Disallow: /*?*
+
+# ✅ 크롤링 허용 경로 (메인 공개 영역)
+Allow: /
+
+# ✅ 사이트맵 경로 (정식 HTTPS)
+Sitemap: https://www.iseonsaengjulnun.com/sitemap.xml
+
+# ✅ Host 설정 (중복도메인 방지)
+Host: https://www.iseonsaengjulnun.com
